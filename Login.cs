@@ -17,10 +17,22 @@ namespace C969Scheduler
             InitializeComponent();
         }
 
+        // load user data for login form ------------------------------------------------------------------------------------------------------------
+        private void Login_Load(object sender, EventArgs e)
+        {
+            // TODO: This line of code loads data into the 'DataSet1.user' table. You can move, or remove it, as needed.
+            this.userTableAdapter.Fill(this.DataSet1.user);
+
+
+        }
+        //-------------------------------------------------------------------------------------------------------------------------------------------
+
+        // login button behaviour -------------------------------------------------------------------------------------------------------------------
         private void logInBtn_Click(object sender, EventArgs e)
         {
             string userName = usernameTxt.Text;
             string passWord = passwordTxt.Text;
+            // lambdas are used here to speed the processes for logging in and checking that user inputs matched the proper login information.
             if (DataSet1.user.Any(a => a.userName.Equals(userName)) == true)
             {
                 var newUser = DataSet1.user.Where(a => a.userName == userName);
@@ -43,16 +55,10 @@ namespace C969Scheduler
                 MessageBox.Show(Properties.Resources.LoginError, Properties.Resources.LoginFail, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------
         
 
-        private void Login_Load(object sender, EventArgs e)
-        {
-            // TODO: This line of code loads data into the 'DataSet1.user' table. You can move, or remove it, as needed.
-            this.userTableAdapter.Fill(this.DataSet1.user);
-
-
-        }
+        
 
         
     }

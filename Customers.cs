@@ -17,6 +17,26 @@ namespace C969Scheduler
             InitializeComponent();
         }
 
+        // load required datasets for the customer form ------------------------------------------------------------------------------------------
+        private void Customers_Load(object sender, EventArgs e)
+        {
+            this.customerTableAdapter.Fill(this.dataSet1.customer);
+            this.addressTableAdapter.Fill(this.dataSet1.address);
+
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------------
+
+        // row select behaviour ------------------------------------------------------------------------------------------------------------------
+        private void addressDataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (addressDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() != null)
+            {
+                addressIdTextBox.Text = addressDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
+            }
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------------
+
+        // enable or disable the appropriate buttons----------------------------------------------------------------------------------------------
         private void EnableDisableBtns()
         {
             if(addBtn.Enabled == true && updateBtn.Enabled == true && deleteBtn.Enabled == true)
@@ -44,51 +64,9 @@ namespace C969Scheduler
                 groupBox2.Enabled = false;
             }
         }
-
-        public bool AllFieldsFilled()
-        {
-            if (customerNameTextBox.Text != "" && addressIdTextBox.Text != "")
-            {
-                return true;
-            }
-            else
-            {
-                if(customerNameTextBox.Text == "")
-                {
-                    customerNameTextBox.BackColor = Color.Coral;
-                }
-                if(addressIdTextBox.Text == "")
-                {
-                    addressIdTextBox.BackColor = Color.Coral;
-                }
-                MessageBox.Show(Properties.Resources.Fieldsincomplete, Properties.Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-        }
-
-
-        private void Customers_Load(object sender, EventArgs e)
-        {
-            this.customerTableAdapter.Fill(this.dataSet1.customer);
-            this.addressTableAdapter.Fill(this.dataSet1.address);
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            addressTableAdapter.FillByAddress(dataSet1.address, '%' + textBox1.Text + '%');
-        }
-
-        private void customerDataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            if(customerDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString() != null)
-            {
-                int addressId;
-                int.TryParse(customerDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString(), out addressId);
-                addressTableAdapter.FillById(dataSet1.address, addressId);
-            }
-        }
-
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
+                
+        // add, update, delete button behaviour ---------------------------------------------------------------------------------------------------------
         private void addBtn_Click(object sender, EventArgs e)
         {
             EnableDisableBtns();
@@ -138,7 +116,9 @@ namespace C969Scheduler
                 }
             }
         }
+        // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+        // save and cancel button behaviour -----------------------------------------------------------------------------------------------------
         private void saveBtn_Click(object sender, EventArgs e)
         {
             if(AllFieldsFilled() == true)
@@ -166,15 +146,9 @@ namespace C969Scheduler
             dataSet1.customer.RejectChanges();
             customerBindingSource.CancelEdit();
         }
-
-        private void addressDataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            if(addressDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() != null)
-            {
-                addressIdTextBox.Text = addressDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
-            }
-        }
-
+        //----------------------------------------------------------------------------------------------------------------------------------------
+        
+        // navigation button behaviour -----------------------------------------------------------------------------------------------------------
         private void homeBtn_Click(object sender, EventArgs e)
         {
             dataSet1.customer.RejectChanges();
@@ -182,10 +156,53 @@ namespace C969Scheduler
             this.Hide();
         }
 
+        
         private void addAddressBtn_Click(object sender, EventArgs e)
         {
             AddAddress newAddress = new AddAddress();
             newAddress.ShowDialog();
         }
+        //-----------------------------------------------------------------------------------------------------------------------------------------
+
+        //search behaviour ------------------------------------------------------------------------------------------------------------------------
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            addressTableAdapter.FillByAddress(dataSet1.address, '%' + textBox1.Text + '%');
+        }
+
+        private void customerDataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (customerDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString() != null)
+            {
+                int addressId;
+                int.TryParse(customerDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString(), out addressId);
+                addressTableAdapter.FillById(dataSet1.address, addressId);
+            }
+        }
+        //------------------------------------------------------------------------------------------------------------------------------------------
+
+        //ensure all fields are filled -------------------------------------------------------------------------------------------------------------
+        public bool AllFieldsFilled()
+        {
+            if (customerNameTextBox.Text != "" && addressIdTextBox.Text != "")
+            {
+                return true;
+            }
+            else
+            {
+                if (customerNameTextBox.Text == "")
+                {
+                    customerNameTextBox.BackColor = Color.Coral;
+                }
+                if (addressIdTextBox.Text == "")
+                {
+                    addressIdTextBox.BackColor = Color.Coral;
+                }
+                MessageBox.Show(Properties.Resources.Fieldsincomplete, Properties.Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+        //-----------------------------------------------------------------------------------------------------------------------------------------
+
     }
 }

@@ -376,6 +376,11 @@ namespace C969Scheduler
             }
         }
 
+        private void countryIdLabel1_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void cancelBtn_Click(object sender, EventArgs e)
         {
             if (isAdd)

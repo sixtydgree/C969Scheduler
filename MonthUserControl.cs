@@ -20,6 +20,27 @@ namespace C969Scheduler
             InitializeComponent();
         }
 
+        // Row select behaviours -----------------------------------------------------------------------------------------------------------------------
+
+        private void appointmentDataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (appointmentDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString() != null)
+            {
+                int.TryParse(appointmentDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString(), out GVariables.customerId);
+                customerInformationTableAdapter.FillById(dataSet1.customerInformation, GVariables.customerId);
+            }
+        }
+
+        private void customerInformationDataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (customerInformationDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() != null)
+            {
+                customerIdTextBox.Text = customerInformationDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
+            }
+        }
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
+
+        // Enable or disable buttons when needed --------------------------------------------------------------------------------------------------------
         private void EnableDisableBtns()
         {
             if(addBtn.Enabled == true && updateBtn.Enabled == true && deleteBtn.Enabled == true)
@@ -55,14 +76,16 @@ namespace C969Scheduler
                 groupBox3.Enabled = false;
             }
         }
+        //----------------------------------------------------------------------------------------------------------------------------------------------------------
 
+        // Load properties and dates -------------------------------------------------------------------------------------------------------------------------------
         private void MonthUserControl_Load(object sender, EventArgs e)
         {
             label3.Text = Properties.Resources.Current + " " + GVariables.userName;
             isMonth = true;
             GVariables.type = new List<string>();
             GVariables.contact = new List<string>();
-            GVariables.monthNums = new List<int>();
+            
             string[] types =
             {
                 "Scrum",
@@ -88,14 +111,7 @@ namespace C969Scheduler
             {
                 GVariables.contact.AddRange(contacts);
             }
-            int[] months =
-            {
-                1,2,3,4,5,6,7,8,9,10,11,12
-            };
-            if(GVariables.monthNums.Count == 0)
-            {
-                GVariables.monthNums.AddRange(months);
-            }
+            
             GVariables.nowDate = DateTime.Now;
             GVariables.month = GVariables.nowDate.Month;
             GVariables.year = GVariables.nowDate.Year;
@@ -121,7 +137,9 @@ namespace C969Scheduler
                 contactComboBox.Items.Add(contact);
             }
         }
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
 
+        // add, update, delete buttons ------------------------------------------------------------------------------------------------------------------
         private void addBtn_Click(object sender, EventArgs e)
         {
             customerInformationTableAdapter.Fill(dataSet1.customerInformation);
@@ -211,14 +229,7 @@ namespace C969Scheduler
         }
         //----------------------------------------------------------------------------------------------------------------------------------------------------
 
-        private void appointmentDataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            if(appointmentDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString() != null)
-            {
-                int.TryParse(appointmentDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString(), out GVariables.customerId);
-                customerInformationTableAdapter.FillById(dataSet1.customerInformation, GVariables.customerId);
-            }
-        }
+        
 
         // Navigation buttons "next week", "previous week", etc.-------------------------------------------------------------------------------------------
         private void prevBtn_Click(object sender, EventArgs e)
@@ -347,7 +358,9 @@ namespace C969Scheduler
             }
             
         }
+        //-----------------------------------------------------------------------------------------------------------------------------------------
 
+        // search box behaviour -------------------------------------------------------------------------------------------------------------------
         private void searchTxtBox_TextChanged(object sender, EventArgs e)
         {
             if (nameRadio.Checked)
@@ -365,15 +378,10 @@ namespace C969Scheduler
                 customerInformationTableAdapter.FillByPhone(dataSet1.customerInformation, '%' + searchTxtBox.Text + '%');
             }
         }
-
-        private void customerInformationDataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            if(customerInformationDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() != null)
-            {
-                customerIdTextBox.Text = customerInformationDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
-            }
-        }
-
+        //------------------------------------------------------------------------------------------------------------------------------------------
+        
+        //view customers ---------------------------------------------------------------------------------------------------------------------------
+        // this button no longer updates customers. It now loads the customers form.
         private void updateCusBtn_Click(object sender, EventArgs e)
         {
             Customers newCustomers = new Customers();
@@ -526,5 +534,7 @@ namespace C969Scheduler
             appointmentTableAdapter.FillByDate(dataSet1.appointment, GVariables.date1, GVariables.date2);
             monthYearTxt.Text = "Days of " + GVariables.day + " - " + sevenDay + " " + GVariables.monthNm + " " + GVariables.year;
         }
+        //-----------------------------------------------------------------------------------------------------------------------------------------------
+
     }
 }

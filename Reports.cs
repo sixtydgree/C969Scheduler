@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace C969Scheduler
 {
-    public partial class WeekUserControl : UserControl
+    public partial class Reports : Form
     {
-        public WeekUserControl()
+        public Reports()
         {
             InitializeComponent();
         }
