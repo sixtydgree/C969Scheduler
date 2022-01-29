@@ -12,7 +12,7 @@ namespace C969Scheduler
 {
     public partial class AddAddress : Form
     {
-        private bool isApp, isCity, isCountry;
+        private bool isAdd, isCity, isCountry;
 
         public AddAddress()
         {
@@ -31,7 +31,7 @@ namespace C969Scheduler
 
         private void AddAddress_Load(object sender, EventArgs e)
         {
-            isApp = false;
+            isAdd = false;
             isCity = false;
             isCountry = false;
             // TODO: This line of code loads data into the 'dataSet1.country' table. You can move, or remove it, as needed.
@@ -47,7 +47,7 @@ namespace C969Scheduler
 
         private void closeBtn_Click(object sender, EventArgs e)
         {
-            isApp = false;
+            isAdd = false;
             isCity = false;
             isCountry = false;
             dataSet1.address.RejectChanges();
@@ -76,7 +76,7 @@ namespace C969Scheduler
                 deleteAddBtn.Enabled = false;
                 deleteCityBtn.Enabled = false;
                 deleteCountryBtn.Enabled = false;
-                if (isApp)
+                if (isAdd)
                 {
                     groupBox1.Enabled = true;
                     groupBox2.Enabled = false;
@@ -138,7 +138,7 @@ namespace C969Scheduler
         // Appointment Buttons --------------------------------------------------------------------------------------------------------------------------------------
         private void addAddressBtn_Click(object sender, EventArgs e)
         {
-            isApp = true;
+            isAdd = true;
             EnableDisableBtns();
             addressBindingSource.AddNew();
             createDateDateTimePicker.Value = DateTime.Now;
@@ -150,7 +150,7 @@ namespace C969Scheduler
 
         private void updateAddBtn_Click(object sender, EventArgs e)
         {
-            isApp = true;
+            isAdd = true;
             this.cityTableAdapter.Fill(this.dataSet1.city);
             int rows;
             rows = dataSet1.address.Rows.Count;
@@ -315,35 +315,74 @@ namespace C969Scheduler
         private void saveBtn_Click(object sender, EventArgs e)
         {
             // Complete input checks and save accordingly.
-            if (isApp)
+            if (isAdd)
             {
                 if (CheckInputs())
                 {
-
+                    EnableDisableBtns();
+                    addressBindingSource.EndEdit();
+                    int r;
+                    r = addressTableAdapter.Update(dataSet1.address);
+                    if (r > 0)
+                    {
+                        MessageBox.Show(Properties.Resources.Saved);
+                        isAdd = false;
+                    }
+                    else
+                    {
+                        MessageBox.Show(Properties.Resources.NothingSaved);
+                        return;
+                    }
                 }
             }
             else if (isCity)
             {
                 if (CheckInputs())
                 {
-
+                    EnableDisableBtns();
+                    cityBindingSource.EndEdit();
+                    int r;
+                    r = cityTableAdapter.Update(dataSet1.city);
+                    if (r > 0)
+                    {
+                        MessageBox.Show(Properties.Resources.Saved);
+                        isCity = false;
+                    }
+                    else
+                    {
+                        MessageBox.Show(Properties.Resources.NothingSaved);
+                        return;
+                    }
                 }
             }
             else if (isCountry)
             {if (CheckInputs())
                 {
-
+                    EnableDisableBtns();
+                    countryBindingSource.EndEdit();
+                    int r;
+                    r = countryTableAdapter.Update(dataSet1.country);
+                    if (r > 0)
+                    {
+                        MessageBox.Show(Properties.Resources.Saved);
+                        isCountry = false;
+                    }
+                    else
+                    {
+                        MessageBox.Show(Properties.Resources.NothingSaved);
+                        return;
+                    }
                 }
             }
         }
 
         private void cancelBtn_Click(object sender, EventArgs e)
         {
-            if (isApp)
+            if (isAdd)
             {
                 dataSet1.address.RejectChanges();
                 addressBindingSource.CancelEdit();
-                isApp = false;
+                isAdd = false;
             }
             else if (isCity)
             {
@@ -365,7 +404,7 @@ namespace C969Scheduler
 
         private bool CheckInputs()
         {
-            if (isApp)
+            if (isAdd)
             {
                 if(addressTextBox.Text == "")
                 {
