@@ -26,8 +26,8 @@ namespace C969Scheduler.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("server=localhost;port=3306;user id=root;password=Loladog2;persistsecurityinfo=True;database" +
-            "=client_schedule")]
+        [global::System.Configuration.DefaultSettingValueAttribute("server=localhost;user id=sqlUser;password=Passw0rd!;persistsecurityinfo=True;data" +
+            "base=client_schedule")]
         public string client_scheduleConnectionString {
             get {
                 return ((string)(this["client_scheduleConnectionString"]));
