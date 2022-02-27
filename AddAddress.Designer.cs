@@ -89,23 +89,18 @@ namespace C969Scheduler
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.updateAddBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.deleteAddBtn = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.addCityBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.updateCityBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.deleteCityBtn = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
             this.addCountryBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.updateCountryBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.deleteCountryBtn = new System.Windows.Forms.ToolStripButton();
             this.closeBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
             this.cancelBtn = new System.Windows.Forms.ToolStripButton();
@@ -265,7 +260,6 @@ namespace C969Scheduler
             // 
             resources.ApplyResources(countryIdLabel1, "countryIdLabel1");
             countryIdLabel1.Name = "countryIdLabel1";
-            countryIdLabel1.Click += new System.EventHandler(this.countryIdLabel1_Click);
             // 
             // countryLabel
             // 
@@ -294,7 +288,6 @@ namespace C969Scheduler
             // 
             // addressDataGridView
             // 
-            resources.ApplyResources(this.addressDataGridView, "addressDataGridView");
             this.addressDataGridView.AllowUserToAddRows = false;
             this.addressDataGridView.AllowUserToDeleteRows = false;
             this.addressDataGridView.AllowUserToResizeColumns = false;
@@ -311,6 +304,7 @@ namespace C969Scheduler
             this.dataGridViewTextBoxColumn5,
             this.dataGridViewTextBoxColumn6});
             this.addressDataGridView.DataSource = this.addressBindingSource;
+            resources.ApplyResources(this.addressDataGridView, "addressDataGridView");
             this.addressDataGridView.Name = "addressDataGridView";
             this.addressDataGridView.ReadOnly = true;
             this.addressDataGridView.RowHeadersVisible = false;
@@ -369,7 +363,6 @@ namespace C969Scheduler
             // 
             // cityDataGridView
             // 
-            resources.ApplyResources(this.cityDataGridView, "cityDataGridView");
             this.cityDataGridView.AllowUserToAddRows = false;
             this.cityDataGridView.AllowUserToDeleteRows = false;
             this.cityDataGridView.AllowUserToResizeColumns = false;
@@ -383,10 +376,12 @@ namespace C969Scheduler
             this.dataGridViewTextBoxColumn12,
             this.dataGridViewTextBoxColumn13});
             this.cityDataGridView.DataSource = this.cityBindingSource;
+            resources.ApplyResources(this.cityDataGridView, "cityDataGridView");
             this.cityDataGridView.Name = "cityDataGridView";
             this.cityDataGridView.ReadOnly = true;
             this.cityDataGridView.RowHeadersVisible = false;
             this.cityDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.cityDataGridView.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.cityDataGridView_RowEnter);
             // 
             // dataGridViewTextBoxColumn11
             // 
@@ -416,7 +411,6 @@ namespace C969Scheduler
             // 
             // countryDataGridView
             // 
-            resources.ApplyResources(this.countryDataGridView, "countryDataGridView");
             this.countryDataGridView.AllowUserToAddRows = false;
             this.countryDataGridView.AllowUserToDeleteRows = false;
             this.countryDataGridView.AllowUserToResizeColumns = false;
@@ -429,10 +423,12 @@ namespace C969Scheduler
             this.dataGridViewTextBoxColumn18,
             this.dataGridViewTextBoxColumn19});
             this.countryDataGridView.DataSource = this.countryBindingSource;
+            resources.ApplyResources(this.countryDataGridView, "countryDataGridView");
             this.countryDataGridView.Name = "countryDataGridView";
             this.countryDataGridView.ReadOnly = true;
             this.countryDataGridView.RowHeadersVisible = false;
             this.countryDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.countryDataGridView.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.countryDataGridView_RowEnter);
             // 
             // dataGridViewTextBoxColumn18
             // 
@@ -455,40 +451,40 @@ namespace C969Scheduler
             // 
             // addressIdTextBox
             // 
-            resources.ApplyResources(this.addressIdTextBox, "addressIdTextBox");
             this.addressIdTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.addressBindingSource, "addressId", true));
+            resources.ApplyResources(this.addressIdTextBox, "addressIdTextBox");
             this.addressIdTextBox.Name = "addressIdTextBox";
             this.addressIdTextBox.ReadOnly = true;
             // 
             // addressTextBox
             // 
-            resources.ApplyResources(this.addressTextBox, "addressTextBox");
             this.addressTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.addressBindingSource, "address", true));
+            resources.ApplyResources(this.addressTextBox, "addressTextBox");
             this.addressTextBox.Name = "addressTextBox";
             // 
             // address2TextBox
             // 
-            resources.ApplyResources(this.address2TextBox, "address2TextBox");
             this.address2TextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.addressBindingSource, "address2", true));
+            resources.ApplyResources(this.address2TextBox, "address2TextBox");
             this.address2TextBox.Name = "address2TextBox";
             // 
             // cityIdTextBox
             // 
-            resources.ApplyResources(this.cityIdTextBox, "cityIdTextBox");
             this.cityIdTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.addressBindingSource, "cityId", true));
+            resources.ApplyResources(this.cityIdTextBox, "cityIdTextBox");
             this.cityIdTextBox.Name = "cityIdTextBox";
             this.cityIdTextBox.ReadOnly = true;
             // 
             // postalCodeTextBox
             // 
-            resources.ApplyResources(this.postalCodeTextBox, "postalCodeTextBox");
             this.postalCodeTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.addressBindingSource, "postalCode", true));
+            resources.ApplyResources(this.postalCodeTextBox, "postalCodeTextBox");
             this.postalCodeTextBox.Name = "postalCodeTextBox";
             // 
             // phoneTextBox
             // 
-            resources.ApplyResources(this.phoneTextBox, "phoneTextBox");
             this.phoneTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.addressBindingSource, "phone", true));
+            resources.ApplyResources(this.phoneTextBox, "phoneTextBox");
             this.phoneTextBox.Name = "phoneTextBox";
             // 
             // createDateDateTimePicker
@@ -500,8 +496,8 @@ namespace C969Scheduler
             // 
             // createdByTextBox
             // 
-            resources.ApplyResources(this.createdByTextBox, "createdByTextBox");
             this.createdByTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.addressBindingSource, "createdBy", true));
+            resources.ApplyResources(this.createdByTextBox, "createdByTextBox");
             this.createdByTextBox.Name = "createdByTextBox";
             this.createdByTextBox.ReadOnly = true;
             // 
@@ -514,14 +510,13 @@ namespace C969Scheduler
             // 
             // lastUpdateByTextBox
             // 
-            resources.ApplyResources(this.lastUpdateByTextBox, "lastUpdateByTextBox");
             this.lastUpdateByTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.addressBindingSource, "lastUpdateBy", true));
+            resources.ApplyResources(this.lastUpdateByTextBox, "lastUpdateByTextBox");
             this.lastUpdateByTextBox.Name = "lastUpdateByTextBox";
             this.lastUpdateByTextBox.ReadOnly = true;
             // 
             // groupBox1
             // 
-            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Controls.Add(this.createdByTextBox);
             this.groupBox1.Controls.Add(addressIdLabel);
             this.groupBox1.Controls.Add(this.lastUpdateByTextBox);
@@ -542,6 +537,7 @@ namespace C969Scheduler
             this.groupBox1.Controls.Add(postalCodeLabel);
             this.groupBox1.Controls.Add(phoneLabel);
             this.groupBox1.Controls.Add(this.postalCodeTextBox);
+            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
             // 
@@ -554,23 +550,18 @@ namespace C969Scheduler
             this.toolStripSeparator1,
             this.updateAddBtn,
             this.toolStripSeparator2,
-            this.deleteAddBtn,
-            this.toolStripSeparator3,
             this.toolStripSeparator11,
             this.toolStripLabel2,
             this.addCityBtn,
             this.toolStripSeparator4,
             this.updateCityBtn,
             this.toolStripSeparator5,
-            this.deleteCityBtn,
-            this.toolStripSeparator6,
             this.toolStripSeparator12,
             this.toolStripLabel3,
             this.addCountryBtn,
             this.toolStripSeparator7,
             this.updateCountryBtn,
             this.toolStripSeparator8,
-            this.deleteCountryBtn,
             this.closeBtn,
             this.toolStripSeparator13,
             this.cancelBtn,
@@ -587,44 +578,32 @@ namespace C969Scheduler
             // 
             // addAddressBtn
             // 
-            resources.ApplyResources(this.addAddressBtn, "addAddressBtn");
             this.addAddressBtn.Image = global::C969Scheduler.Properties.Resources._34237___add_plus_icon;
+            resources.ApplyResources(this.addAddressBtn, "addAddressBtn");
             this.addAddressBtn.Name = "addAddressBtn";
             this.addAddressBtn.Click += new System.EventHandler(this.addAddressBtn_Click);
             // 
             // toolStripSeparator1
             // 
-            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             this.toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             // 
             // updateAddBtn
             // 
-            resources.ApplyResources(this.updateAddBtn, "updateAddBtn");
             this.updateAddBtn.Image = global::C969Scheduler.Properties.Resources._24350_system_software_update_reload_actualizar_icon;
+            resources.ApplyResources(this.updateAddBtn, "updateAddBtn");
             this.updateAddBtn.Name = "updateAddBtn";
             this.updateAddBtn.Click += new System.EventHandler(this.updateAddBtn_Click);
             // 
             // toolStripSeparator2
             // 
-            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            // 
-            // deleteAddBtn
-            // 
-            resources.ApplyResources(this.deleteAddBtn, "deleteAddBtn");
-            this.deleteAddBtn.Image = global::C969Scheduler.Properties.Resources._23231_delete_icon;
-            this.deleteAddBtn.Name = "deleteAddBtn";
-            this.deleteAddBtn.Click += new System.EventHandler(this.deleteAddBtn_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             // 
             // toolStripSeparator11
             // 
-            resources.ApplyResources(this.toolStripSeparator11, "toolStripSeparator11");
             this.toolStripSeparator11.Name = "toolStripSeparator11";
+            resources.ApplyResources(this.toolStripSeparator11, "toolStripSeparator11");
             // 
             // toolStripLabel2
             // 
@@ -633,44 +612,32 @@ namespace C969Scheduler
             // 
             // addCityBtn
             // 
-            resources.ApplyResources(this.addCityBtn, "addCityBtn");
             this.addCityBtn.Image = global::C969Scheduler.Properties.Resources._34237___add_plus_icon;
+            resources.ApplyResources(this.addCityBtn, "addCityBtn");
             this.addCityBtn.Name = "addCityBtn";
             this.addCityBtn.Click += new System.EventHandler(this.addCityBtn_Click);
             // 
             // toolStripSeparator4
             // 
-            resources.ApplyResources(this.toolStripSeparator4, "toolStripSeparator4");
             this.toolStripSeparator4.Name = "toolStripSeparator4";
+            resources.ApplyResources(this.toolStripSeparator4, "toolStripSeparator4");
             // 
             // updateCityBtn
             // 
-            resources.ApplyResources(this.updateCityBtn, "updateCityBtn");
             this.updateCityBtn.Image = global::C969Scheduler.Properties.Resources._24350_system_software_update_reload_actualizar_icon;
+            resources.ApplyResources(this.updateCityBtn, "updateCityBtn");
             this.updateCityBtn.Name = "updateCityBtn";
             this.updateCityBtn.Click += new System.EventHandler(this.updateCityBtn_Click);
             // 
             // toolStripSeparator5
             // 
-            resources.ApplyResources(this.toolStripSeparator5, "toolStripSeparator5");
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            // 
-            // deleteCityBtn
-            // 
-            resources.ApplyResources(this.deleteCityBtn, "deleteCityBtn");
-            this.deleteCityBtn.Image = global::C969Scheduler.Properties.Resources._23231_delete_icon;
-            this.deleteCityBtn.Name = "deleteCityBtn";
-            this.deleteCityBtn.Click += new System.EventHandler(this.deleteCityBtn_Click);
-            // 
-            // toolStripSeparator6
-            // 
-            resources.ApplyResources(this.toolStripSeparator6, "toolStripSeparator6");
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            resources.ApplyResources(this.toolStripSeparator5, "toolStripSeparator5");
             // 
             // toolStripSeparator12
             // 
-            resources.ApplyResources(this.toolStripSeparator12, "toolStripSeparator12");
             this.toolStripSeparator12.Name = "toolStripSeparator12";
+            resources.ApplyResources(this.toolStripSeparator12, "toolStripSeparator12");
             // 
             // toolStripLabel3
             // 
@@ -679,99 +646,92 @@ namespace C969Scheduler
             // 
             // addCountryBtn
             // 
-            resources.ApplyResources(this.addCountryBtn, "addCountryBtn");
             this.addCountryBtn.Image = global::C969Scheduler.Properties.Resources._34237___add_plus_icon;
+            resources.ApplyResources(this.addCountryBtn, "addCountryBtn");
             this.addCountryBtn.Name = "addCountryBtn";
             this.addCountryBtn.Click += new System.EventHandler(this.addCountryBtn_Click);
             // 
             // toolStripSeparator7
             // 
-            resources.ApplyResources(this.toolStripSeparator7, "toolStripSeparator7");
             this.toolStripSeparator7.Name = "toolStripSeparator7";
+            resources.ApplyResources(this.toolStripSeparator7, "toolStripSeparator7");
             // 
             // updateCountryBtn
             // 
-            resources.ApplyResources(this.updateCountryBtn, "updateCountryBtn");
             this.updateCountryBtn.Image = global::C969Scheduler.Properties.Resources._24350_system_software_update_reload_actualizar_icon;
+            resources.ApplyResources(this.updateCountryBtn, "updateCountryBtn");
             this.updateCountryBtn.Name = "updateCountryBtn";
             this.updateCountryBtn.Click += new System.EventHandler(this.updateCountryBtn_Click);
             // 
             // toolStripSeparator8
             // 
-            resources.ApplyResources(this.toolStripSeparator8, "toolStripSeparator8");
             this.toolStripSeparator8.Name = "toolStripSeparator8";
-            // 
-            // deleteCountryBtn
-            // 
-            resources.ApplyResources(this.deleteCountryBtn, "deleteCountryBtn");
-            this.deleteCountryBtn.Image = global::C969Scheduler.Properties.Resources._23231_delete_icon;
-            this.deleteCountryBtn.Name = "deleteCountryBtn";
-            this.deleteCountryBtn.Click += new System.EventHandler(this.deleteCountryBtn_Click);
+            resources.ApplyResources(this.toolStripSeparator8, "toolStripSeparator8");
             // 
             // closeBtn
             // 
-            resources.ApplyResources(this.closeBtn, "closeBtn");
             this.closeBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.closeBtn.Image = global::C969Scheduler.Properties.Resources._34217_close_delete_remove_icon;
+            resources.ApplyResources(this.closeBtn, "closeBtn");
             this.closeBtn.Name = "closeBtn";
             this.closeBtn.Click += new System.EventHandler(this.closeBtn_Click);
             // 
             // toolStripSeparator13
             // 
-            resources.ApplyResources(this.toolStripSeparator13, "toolStripSeparator13");
             this.toolStripSeparator13.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.toolStripSeparator13.Name = "toolStripSeparator13";
+            resources.ApplyResources(this.toolStripSeparator13, "toolStripSeparator13");
             // 
             // cancelBtn
             // 
-            resources.ApplyResources(this.cancelBtn, "cancelBtn");
             this.cancelBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            resources.ApplyResources(this.cancelBtn, "cancelBtn");
             this.cancelBtn.Image = global::C969Scheduler.Properties.Resources._12607_close_delete_error_exit_false_icon;
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
             // 
             // toolStripSeparator10
             // 
-            resources.ApplyResources(this.toolStripSeparator10, "toolStripSeparator10");
             this.toolStripSeparator10.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.toolStripSeparator10.Name = "toolStripSeparator10";
+            resources.ApplyResources(this.toolStripSeparator10, "toolStripSeparator10");
             // 
             // saveBtn
             // 
-            resources.ApplyResources(this.saveBtn, "saveBtn");
             this.saveBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            resources.ApplyResources(this.saveBtn, "saveBtn");
             this.saveBtn.Image = global::C969Scheduler.Properties.Resources._285657_floppy_guardar_save_icon;
             this.saveBtn.Name = "saveBtn";
             this.saveBtn.Click += new System.EventHandler(this.saveBtn_Click);
             // 
             // toolStripSeparator9
             // 
-            resources.ApplyResources(this.toolStripSeparator9, "toolStripSeparator9");
             this.toolStripSeparator9.Name = "toolStripSeparator9";
+            resources.ApplyResources(this.toolStripSeparator9, "toolStripSeparator9");
             // 
             // toolStripSeparator14
             // 
-            resources.ApplyResources(this.toolStripSeparator14, "toolStripSeparator14");
             this.toolStripSeparator14.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.toolStripSeparator14.Name = "toolStripSeparator14";
+            resources.ApplyResources(this.toolStripSeparator14, "toolStripSeparator14");
             // 
             // cityIdTextBox1
             // 
-            resources.ApplyResources(this.cityIdTextBox1, "cityIdTextBox1");
             this.cityIdTextBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.cityBindingSource, "cityId", true));
+            resources.ApplyResources(this.cityIdTextBox1, "cityIdTextBox1");
             this.cityIdTextBox1.Name = "cityIdTextBox1";
             this.cityIdTextBox1.ReadOnly = true;
             // 
             // cityTextBox
             // 
-            resources.ApplyResources(this.cityTextBox, "cityTextBox");
             this.cityTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.cityBindingSource, "city", true));
+            resources.ApplyResources(this.cityTextBox, "cityTextBox");
             this.cityTextBox.Name = "cityTextBox";
             // 
             // countryIdTextBox
             // 
-            resources.ApplyResources(this.countryIdTextBox, "countryIdTextBox");
             this.countryIdTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.cityBindingSource, "countryId", true));
+            resources.ApplyResources(this.countryIdTextBox, "countryIdTextBox");
             this.countryIdTextBox.Name = "countryIdTextBox";
             this.countryIdTextBox.ReadOnly = true;
             // 
@@ -784,8 +744,8 @@ namespace C969Scheduler
             // 
             // createdByTextBox1
             // 
-            resources.ApplyResources(this.createdByTextBox1, "createdByTextBox1");
             this.createdByTextBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.cityBindingSource, "createdBy", true));
+            resources.ApplyResources(this.createdByTextBox1, "createdByTextBox1");
             this.createdByTextBox1.Name = "createdByTextBox1";
             this.createdByTextBox1.ReadOnly = true;
             // 
@@ -798,14 +758,13 @@ namespace C969Scheduler
             // 
             // lastUpdateByTextBox1
             // 
-            resources.ApplyResources(this.lastUpdateByTextBox1, "lastUpdateByTextBox1");
             this.lastUpdateByTextBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.cityBindingSource, "lastUpdateBy", true));
+            resources.ApplyResources(this.lastUpdateByTextBox1, "lastUpdateByTextBox1");
             this.lastUpdateByTextBox1.Name = "lastUpdateByTextBox1";
             this.lastUpdateByTextBox1.ReadOnly = true;
             // 
             // groupBox2
             // 
-            resources.ApplyResources(this.groupBox2, "groupBox2");
             this.groupBox2.Controls.Add(this.countryIdTextBox);
             this.groupBox2.Controls.Add(cityIdLabel1);
             this.groupBox2.Controls.Add(this.lastUpdateByTextBox1);
@@ -820,12 +779,12 @@ namespace C969Scheduler
             this.groupBox2.Controls.Add(createdByLabel1);
             this.groupBox2.Controls.Add(createDateLabel1);
             this.groupBox2.Controls.Add(this.createDateDateTimePicker1);
+            resources.ApplyResources(this.groupBox2, "groupBox2");
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.TabStop = false;
             // 
             // groupBox3
             // 
-            resources.ApplyResources(this.groupBox3, "groupBox3");
             this.groupBox3.Controls.Add(countryIdLabel1);
             this.groupBox3.Controls.Add(this.countryIdTextBox1);
             this.groupBox3.Controls.Add(countryLabel);
@@ -838,20 +797,21 @@ namespace C969Scheduler
             this.groupBox3.Controls.Add(this.lastUpdateDateTimePicker2);
             this.groupBox3.Controls.Add(lastUpdateByLabel2);
             this.groupBox3.Controls.Add(this.lastUpdateByTextBox2);
+            resources.ApplyResources(this.groupBox3, "groupBox3");
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.TabStop = false;
             // 
             // countryIdTextBox1
             // 
-            resources.ApplyResources(this.countryIdTextBox1, "countryIdTextBox1");
             this.countryIdTextBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.countryBindingSource, "countryId", true));
+            resources.ApplyResources(this.countryIdTextBox1, "countryIdTextBox1");
             this.countryIdTextBox1.Name = "countryIdTextBox1";
             this.countryIdTextBox1.ReadOnly = true;
             // 
             // countryTextBox
             // 
-            resources.ApplyResources(this.countryTextBox, "countryTextBox");
             this.countryTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.countryBindingSource, "country", true));
+            resources.ApplyResources(this.countryTextBox, "countryTextBox");
             this.countryTextBox.Name = "countryTextBox";
             // 
             // createDateDateTimePicker2
@@ -863,8 +823,8 @@ namespace C969Scheduler
             // 
             // createdByTextBox2
             // 
-            resources.ApplyResources(this.createdByTextBox2, "createdByTextBox2");
             this.createdByTextBox2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.countryBindingSource, "createdBy", true));
+            resources.ApplyResources(this.createdByTextBox2, "createdByTextBox2");
             this.createdByTextBox2.Name = "createdByTextBox2";
             this.createdByTextBox2.ReadOnly = true;
             // 
@@ -877,8 +837,8 @@ namespace C969Scheduler
             // 
             // lastUpdateByTextBox2
             // 
-            resources.ApplyResources(this.lastUpdateByTextBox2, "lastUpdateByTextBox2");
             this.lastUpdateByTextBox2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.countryBindingSource, "lastUpdateBy", true));
+            resources.ApplyResources(this.lastUpdateByTextBox2, "lastUpdateByTextBox2");
             this.lastUpdateByTextBox2.Name = "lastUpdateByTextBox2";
             this.lastUpdateByTextBox2.ReadOnly = true;
             // 
@@ -889,9 +849,9 @@ namespace C969Scheduler
             // 
             // groupBox4
             // 
-            resources.ApplyResources(this.groupBox4, "groupBox4");
             this.groupBox4.Controls.Add(this.label1);
             this.groupBox4.Controls.Add(this.citySearch);
+            resources.ApplyResources(this.groupBox4, "groupBox4");
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.TabStop = false;
             // 
@@ -902,9 +862,9 @@ namespace C969Scheduler
             // 
             // groupBox5
             // 
-            resources.ApplyResources(this.groupBox5, "groupBox5");
             this.groupBox5.Controls.Add(this.label2);
             this.groupBox5.Controls.Add(this.countrySearch);
+            resources.ApplyResources(this.groupBox5, "groupBox5");
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.TabStop = false;
             // 
@@ -1023,23 +983,18 @@ namespace C969Scheduler
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton updateAddBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripButton deleteAddBtn;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
         private System.Windows.Forms.ToolStripLabel toolStripLabel2;
         private System.Windows.Forms.ToolStripButton addCityBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton updateCityBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-        private System.Windows.Forms.ToolStripButton deleteCityBtn;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
         private System.Windows.Forms.ToolStripLabel toolStripLabel3;
         private System.Windows.Forms.ToolStripButton addCountryBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripButton updateCountryBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
-        private System.Windows.Forms.ToolStripButton deleteCountryBtn;
         private System.Windows.Forms.ToolStripButton closeBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
         private System.Windows.Forms.ToolStripButton cancelBtn;

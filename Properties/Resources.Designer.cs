@@ -133,6 +133,16 @@ namespace C969Scheduler.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _3044882_extension_file_spreadsheet_xls_icon {
+            get {
+                object obj = ResourceManager.GetObject("_3044882_extension_file_spreadsheet_xls_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap _34217_close_delete_remove_icon {
             get {
                 object obj = ResourceManager.GetObject("_34217_close_delete_remove_icon", resourceCulture);
@@ -219,6 +229,15 @@ namespace C969Scheduler.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  has an appointment with .
+        /// </summary>
+        internal static string AppWith {
+            get {
+                return ResourceManager.GetString("AppWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you would like to delete this appointment?.
         /// </summary>
         internal static string AreYouSure {
@@ -264,11 +283,29 @@ namespace C969Scheduler.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  at .
+        /// </summary>
+        internal static string at {
+            get {
+                return ResourceManager.GetString("at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot book in the past..
         /// </summary>
         internal static string CannotBookInPast {
             get {
                 return ResourceManager.GetString("CannotBookInPast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can&apos;t delete a customer that currently has an appointment..
+        /// </summary>
+        internal static string CannotDelet {
+            get {
+                return ResourceManager.GetString("CannotDelet", resourceCulture);
             }
         }
         
@@ -287,6 +324,15 @@ namespace C969Scheduler.Properties {
         internal static string Closed {
             get {
                 return ResourceManager.GetString("Closed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection Error! .
+        /// </summary>
+        internal static string ConnectionError {
+            get {
+                return ResourceManager.GetString("ConnectionError", resourceCulture);
             }
         }
         
@@ -314,6 +360,15 @@ namespace C969Scheduler.Properties {
         internal static string CustomerDeleted {
             get {
                 return ResourceManager.GetString("CustomerDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data not found!.
+        /// </summary>
+        internal static string DataNotFound {
+            get {
+                return ResourceManager.GetString("DataNotFound", resourceCulture);
             }
         }
         

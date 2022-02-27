@@ -265,12 +265,6 @@
   <data name="updateAddBtn.Text" xml:space="preserve">
     <value>Mettre à jour</value>
   </data>
-  <data name="deleteAddBtn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 38</value>
-  </data>
-  <data name="deleteAddBtn.Text" xml:space="preserve">
-    <value>Effacer</value>
-  </data>
   <data name="toolStripLabel2.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 38</value>
   </data>
@@ -289,12 +283,6 @@
   <data name="updateCityBtn.Text" xml:space="preserve">
     <value>Mettre à jour</value>
   </data>
-  <data name="deleteCityBtn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 38</value>
-  </data>
-  <data name="deleteCityBtn.Text" xml:space="preserve">
-    <value>Effacer</value>
-  </data>
   <data name="toolStripLabel3.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 38</value>
   </data>
@@ -312,12 +300,6 @@
   </data>
   <data name="updateCountryBtn.Text" xml:space="preserve">
     <value>Mettre à jour</value>
-  </data>
-  <data name="deleteCountryBtn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 38</value>
-  </data>
-  <data name="deleteCountryBtn.Text" xml:space="preserve">
-    <value>Effacer</value>
   </data>
   <data name="closeBtn.Size" type="System.Drawing.Size, System.Drawing">
     <value>64, 38</value>

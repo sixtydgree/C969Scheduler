@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace C969Scheduler
 {
@@ -40,6 +41,7 @@ namespace C969Scheduler
                 {
                     GVariables.userId = newUser.FirstOrDefault().userId;
                     GVariables.userName = newUser.FirstOrDefault().userName;
+                    CreateOrAppendTxt();
                     var appWin = new Main();
                     appWin.Show();
                     this.Hide();
@@ -57,8 +59,29 @@ namespace C969Scheduler
         }
         //-----------------------------------------------------------------------------------------------------------------------------------------------------
         
+        //Create .txt file and append current login  ----------------------------------------------------------------------------------------------------------
+        private void CreateOrAppendTxt()
+        {
+            string path = "C:\\Users\\Public\\Documents\\LoginRecords.txt";
 
-        
+            if (!File.Exists(path))
+            {
+                File.Create(path).Close();
+                using (StreamWriter sw = File.AppendText(path))
+                {
+                    sw.WriteLine("User " + GVariables.userName + " with user id " + GVariables.userId + " signed in at " + DateTime.UtcNow);
+                }
+            }
+            else
+            {
+                using (StreamWriter sw = File.AppendText(path))
+                {
+                    sw.WriteLine("User " + GVariables.userName + " with user id " + GVariables.userId + " signed in at " + DateTime.UtcNow);
+                }
+            }
+
+        }
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------
 
         
     }

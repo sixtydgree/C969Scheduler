@@ -12,6 +12,8 @@ namespace C969Scheduler
 {
     public partial class Customers : Form
     {
+        int cusId;
+        private bool isUpdate;
         public Customers()
         {
             InitializeComponent();
@@ -20,9 +22,14 @@ namespace C969Scheduler
         // load required datasets for the customer form ------------------------------------------------------------------------------------------
         private void Customers_Load(object sender, EventArgs e)
         {
+            isUpdate = false;
+            this.appointmentTableAdapter.Fill(this.dataSet1.appointment);
             this.customerTableAdapter.Fill(this.dataSet1.customer);
             this.addressTableAdapter.Fill(this.dataSet1.address);
+            groupBox1.Enabled = false;
+            groupBox2.Enabled = false;
 
+            addressDataGridView.ClearSelection();
         }
         //----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -32,6 +39,7 @@ namespace C969Scheduler
             if (addressDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() != null)
             {
                 addressIdTextBox.Text = addressDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
+                
             }
         }
         //----------------------------------------------------------------------------------------------------------------------------------------
@@ -50,6 +58,7 @@ namespace C969Scheduler
                 addressDataGridView.Enabled = true;
                 groupBox1.Enabled = true;
                 groupBox2.Enabled = true;
+
             }
             else
             {
@@ -70,16 +79,18 @@ namespace C969Scheduler
         private void addBtn_Click(object sender, EventArgs e)
         {
             EnableDisableBtns();
+            activeCheckBox.Checked = true;
             // add new customer
             customerBindingSource.AddNew();
-            createDateDateTimePicker.Value = DateTime.Now;
-            lastUpdateDateTimePicker.Value = DateTime.Now;
+            createDateDateTimePicker.Value = DateTime.UtcNow;
+            lastUpdateDateTimePicker.Value = DateTime.UtcNow;
             createdByTextBox.Text = GVariables.userName;
             lastUpdateByTextBox.Text = GVariables.userName;
         }
 
         private void updateBtn_Click(object sender, EventArgs e)
         {
+            isUpdate = true;
             int rows;
             rows = dataSet1.customer.Count;
             if(rows == 0)
@@ -89,55 +100,90 @@ namespace C969Scheduler
             }
             EnableDisableBtns();
             lastUpdateByTextBox.Text = GVariables.userName;
-            lastUpdateDateTimePicker.Value = DateTime.Now;
+            lastUpdateDateTimePicker.Value = DateTime.UtcNow;
         }
 
         private void deleteBtn_Click(object sender, EventArgs e)
         {
-            int rows;
-            rows = dataSet1.customer.Count;
-            if (rows == 0)
+            var appointment = dataSet1.appointment.Where(a => a.customerId == cusId);
+            if (appointment.Any())
             {
-                MessageBox.Show(Properties.Resources.NoCustomerSelected, Properties.Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                MessageBox.Show(Properties.Resources.CannotDelet, Properties.Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            if(MessageBox.Show(Properties.Resources.AreYouSureCustomer, Properties.Resources.Delete, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            else
             {
-                customerBindingSource.RemoveCurrent();
-                int r;
-                r = customerTableAdapter.Update(dataSet1.customer);
-                if(r > 0)
+                int rows;
+                rows = dataSet1.customer.Count;
+                if (rows == 0)
                 {
-                    MessageBox.Show(Properties.Resources.CustomerDeleted);
+                    MessageBox.Show(Properties.Resources.NoCustomerSelected, Properties.Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
-                else
+                if (MessageBox.Show(Properties.Resources.AreYouSureCustomer, Properties.Resources.Delete, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    MessageBox.Show(Properties.Resources.NothingDeleted);
+                    customerBindingSource.RemoveCurrent();
+                    int r;
+                    r = customerTableAdapter.Update(dataSet1.customer);
+                    if (r > 0)
+                    {
+                        MessageBox.Show(Properties.Resources.CustomerDeleted);
+                    }
+                    else
+                    {
+                        MessageBox.Show(Properties.Resources.NothingDeleted);
+                    }
                 }
             }
+            
         }
         // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         // save and cancel button behaviour -----------------------------------------------------------------------------------------------------
         private void saveBtn_Click(object sender, EventArgs e)
         {
-            if(AllFieldsFilled() == true)
+            if (isUpdate == true)
             {
-                EnableDisableBtns();
-                // save changes
-                customerBindingSource.EndEdit();
-                int r;
-                r = customerTableAdapter.Update(dataSet1.customer);
-                if (r > 0)
+                if (AllFieldsFilled() == true)
                 {
+                    EnableDisableBtns();
+
+                    DbAccess dbAccess = new DbAccess();
+                    dbAccess.Open();
+                    string sql = "UPDATE `client_schedule`.`customer` SET  `customerName` = '" + customerNameTextBox.Text + "', `addressId` = '" + addressIdTextBox.Text + "', `lastUpdateBy` = '" + GVariables.userName + "' WHERE (`customerId` = '" + cusId + "');";
+                    dbAccess.ExecuteNonQuery(sql);
+                    dbAccess.Close();
+
+
                     MessageBox.Show(Properties.Resources.Saved);
+
+                    this.customerTableAdapter.Fill(this.dataSet1.customer);
+
+                    isUpdate = false;
                 }
-                else
+
+            }
+            else
+            {
+                if (AllFieldsFilled() == true)
                 {
-                    MessageBox.Show(Properties.Resources.NothingSaved);
+                    EnableDisableBtns();
+                    // save changes
+                    customerBindingSource.EndEdit();
+                    int r;
+                    r = customerTableAdapter.Update(dataSet1.customer);
+                    if (r > 0)
+                    {
+                        MessageBox.Show(Properties.Resources.Saved);
+                    }
+                    else
+                    {
+                        MessageBox.Show(Properties.Resources.NothingSaved);
+                    }
                 }
             }
-            
+
+
+
         }
 
         private void cancelBtn_Click(object sender, EventArgs e)
@@ -172,11 +218,9 @@ namespace C969Scheduler
 
         private void customerDataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (customerDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString() != null)
+            if (customerDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() != null)
             {
-                int addressId;
-                int.TryParse(customerDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString(), out addressId);
-                addressTableAdapter.FillById(dataSet1.address, addressId);
+                int.TryParse(customerDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString(), out cusId);
             }
         }
         //------------------------------------------------------------------------------------------------------------------------------------------

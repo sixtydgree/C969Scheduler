@@ -118,115 +118,115 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2 cannot be empty. If no Apt., Suite, or Unit number please us "N/A".</value>
+    <value>Adresse 2 darf nicht leer sein. Wenn keine Apt.-, Suite- oder Unit-Nummer vorhanden ist, geben Sie bitte „N/A“ an.</value>
   </data>
   <data name="AppDeleted" xml:space="preserve">
-    <value>Deleted.</value>
+    <value>Gelöscht.</value>
   </data>
   <data name="AppWith" xml:space="preserve">
-    <value> has an appointment with </value>
+    <value> hat einen Termin mit </value>
   </data>
   <data name="AreYouSure" xml:space="preserve">
-    <value>Are you sure you would like to delete this appointment?</value>
+    <value>Möchten Sie diesen Termin wirklich löschen?</value>
   </data>
   <data name="AreYouSureAddress" xml:space="preserve">
-    <value>Are you sure you would like to delete this address?</value>
+    <value>Möchten Sie diese Adresse wirklich löschen?</value>
   </data>
   <data name="AreYouSureCity" xml:space="preserve">
-    <value>Are you sure you would like to delete this city?</value>
+    <value>Möchten Sie diese Stadt wirklich löschen?</value>
   </data>
   <data name="AreYouSureCountry" xml:space="preserve">
-    <value>Are you sure you would like to delete this country?</value>
+    <value>Möchten Sie dieses Land wirklich löschen?</value>
   </data>
   <data name="AreYouSureCustomer" xml:space="preserve">
-    <value>Are you sure you would like to delete this customer?</value>
+    <value>Möchten Sie diesen Kunden wirklich löschen?</value>
   </data>
   <data name="at" xml:space="preserve">
-    <value> at </value>
+    <value> beim </value>
   </data>
   <data name="CannotBookInPast" xml:space="preserve">
-    <value>Cannot book in the past.</value>
+    <value>Kann nicht in der Vergangenheit buchen.</value>
   </data>
   <data name="CannotDelet" xml:space="preserve">
-    <value>You can't delete a customer that currently has an appointment.</value>
+    <value>Sie können keinen Kunden löschen, der derzeit einen Termin hat.</value>
   </data>
   <data name="CityId" xml:space="preserve">
-    <value>Please select the city from the list.</value>
+    <value>Bitte wählen Sie die Stadt aus der Liste aus.</value>
   </data>
   <data name="Closed" xml:space="preserve">
-    <value>Outside working hours</value>
+    <value>Außerhalb der Arbeitszeit</value>
   </data>
   <data name="ConnectionError" xml:space="preserve">
-    <value>Connection Error! </value>
+    <value>Verbindungsfehler! </value>
   </data>
   <data name="CountryId" xml:space="preserve">
-    <value>Please select the country from the list.</value>
+    <value>Bitte wählen Sie das Land aus der Liste aus.</value>
   </data>
   <data name="Current" xml:space="preserve">
-    <value>Current user:</value>
+    <value>Aktueller Benutzer:</value>
   </data>
   <data name="CustomerDeleted" xml:space="preserve">
-    <value>Customer deleted.</value>
+    <value>Kunde gelöscht.</value>
   </data>
   <data name="DataNotFound" xml:space="preserve">
-    <value>Data not found!</value>
+    <value>Daten nicht gefunden!</value>
   </data>
   <data name="DateTaken" xml:space="preserve">
-    <value>This date and time are taken for this contact. Please specify the time in 24 hour format.</value>
+    <value>Dieses Datum und diese Uhrzeit werden für diesen Kontakt übernommen. Bitte geben Sie die Uhrzeit im 24-Stunden-Format an.</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete?</value>
+    <value>Löschen?</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+    <value>Fehler</value>
   </data>
   <data name="Fieldsincomplete" xml:space="preserve">
-    <value>Please fill all required fields.</value>
+    <value>Bitte alle notwendigen Felder ausfüllen.</value>
   </data>
   <data name="LoginError" xml:space="preserve">
-    <value>Incorrect username or password. Please try again.</value>
+    <value>Benutzername oder Passwort falsch. Bitte versuche es erneut.</value>
   </data>
   <data name="LoginFail" xml:space="preserve">
-    <value>Login failed</value>
+    <value>Login fehlgeschlagen</value>
   </data>
   <data name="NextM" xml:space="preserve">
-    <value>Next Month</value>
+    <value>Nächsten Monat</value>
   </data>
   <data name="NextW" xml:space="preserve">
-    <value>Next Week</value>
+    <value>Nächste Woche</value>
   </data>
   <data name="NoAddressSelected" xml:space="preserve">
-    <value>Please select an address to update.</value>
+    <value>Bitte wählen Sie eine zu aktualisierende Adresse aus.</value>
   </data>
   <data name="NoAppointmentSelected" xml:space="preserve">
-    <value>Please select an appointment to update.</value>
+    <value>Bitte wählen Sie einen zu aktualisierenden Termin aus.</value>
   </data>
   <data name="NoCitySelected" xml:space="preserve">
-    <value>Please select a city to update.</value>
+    <value>Bitte wählen Sie eine Stadt zum Aktualisieren aus.</value>
   </data>
   <data name="NoCountrySelected" xml:space="preserve">
-    <value>Please select a country to update.</value>
+    <value>Bitte wählen Sie ein Land zum Aktualisieren aus.</value>
   </data>
   <data name="NoCustomerSelected" xml:space="preserve">
-    <value>Please select a customer.</value>
+    <value>Bitte wählen Sie einen Kunden aus.</value>
   </data>
   <data name="NothingDeleted" xml:space="preserve">
-    <value>Nothing Deleted.</value>
+    <value>Nichts gelöscht.</value>
   </data>
   <data name="NothingSaved" xml:space="preserve">
-    <value>Nothing Saved.</value>
+    <value>Nichts gespeichert.</value>
   </data>
   <data name="OutsideHours" xml:space="preserve">
-    <value>Please select a time between 9am and 5pm.</value>
+    <value>Bitte wählen Sie eine Zeit zwischen 9:00 und 17:00 Uhr aus.</value>
   </data>
   <data name="PrevM" xml:space="preserve">
-    <value>Previous Month</value>
+    <value>Vorheriger Monat</value>
   </data>
   <data name="PrevW" xml:space="preserve">
-    <value>Previous Week</value>
+    <value>Letzte Woche</value>
   </data>
   <data name="Saved" xml:space="preserve">
-    <value>Saved!</value>
+    <value>Gerettet!</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="_12607_close_delete_error_exit_false_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">

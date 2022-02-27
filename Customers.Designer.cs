@@ -85,6 +85,8 @@ namespace C969Scheduler
             this.addAddressBtn = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.appointmentBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.appointmentTableAdapter = new C969Scheduler.Properties.DataSet1TableAdapters.appointmentTableAdapter();
             customerIdLabel = new System.Windows.Forms.Label();
             customerNameLabel = new System.Windows.Forms.Label();
             addressIdLabel = new System.Windows.Forms.Label();
@@ -101,6 +103,7 @@ namespace C969Scheduler
             this.toolStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.appointmentBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // customerIdLabel
@@ -174,7 +177,6 @@ namespace C969Scheduler
             // 
             // addressDataGridView
             // 
-            resources.ApplyResources(this.addressDataGridView, "addressDataGridView");
             this.addressDataGridView.AllowUserToAddRows = false;
             this.addressDataGridView.AllowUserToDeleteRows = false;
             this.addressDataGridView.AutoGenerateColumns = false;
@@ -189,6 +191,7 @@ namespace C969Scheduler
             this.dataGridViewTextBoxColumn5,
             this.dataGridViewTextBoxColumn6});
             this.addressDataGridView.DataSource = this.addressBindingSource;
+            resources.ApplyResources(this.addressDataGridView, "addressDataGridView");
             this.addressDataGridView.Name = "addressDataGridView";
             this.addressDataGridView.ReadOnly = true;
             this.addressDataGridView.RowHeadersVisible = false;
@@ -244,7 +247,6 @@ namespace C969Scheduler
             // 
             // customerDataGridView
             // 
-            resources.ApplyResources(this.customerDataGridView, "customerDataGridView");
             this.customerDataGridView.AllowUserToAddRows = false;
             this.customerDataGridView.AllowUserToDeleteRows = false;
             this.customerDataGridView.AutoGenerateColumns = false;
@@ -257,6 +259,7 @@ namespace C969Scheduler
             this.dataGridViewTextBoxColumn9,
             this.dataGridViewCheckBoxColumn1});
             this.customerDataGridView.DataSource = this.customerBindingSource;
+            resources.ApplyResources(this.customerDataGridView, "customerDataGridView");
             this.customerDataGridView.Name = "customerDataGridView";
             this.customerDataGridView.ReadOnly = true;
             this.customerDataGridView.RowHeadersVisible = false;
@@ -293,30 +296,30 @@ namespace C969Scheduler
             // 
             // customerIdTextBox
             // 
-            resources.ApplyResources(this.customerIdTextBox, "customerIdTextBox");
             this.customerIdTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.customerBindingSource, "customerId", true));
+            resources.ApplyResources(this.customerIdTextBox, "customerIdTextBox");
             this.customerIdTextBox.Name = "customerIdTextBox";
             this.customerIdTextBox.ReadOnly = true;
             // 
             // customerNameTextBox
             // 
-            resources.ApplyResources(this.customerNameTextBox, "customerNameTextBox");
             this.customerNameTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.customerBindingSource, "customerName", true));
+            resources.ApplyResources(this.customerNameTextBox, "customerNameTextBox");
             this.customerNameTextBox.Name = "customerNameTextBox";
             // 
             // addressIdTextBox
             // 
-            resources.ApplyResources(this.addressIdTextBox, "addressIdTextBox");
             this.addressIdTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.customerBindingSource, "addressId", true));
+            resources.ApplyResources(this.addressIdTextBox, "addressIdTextBox");
             this.addressIdTextBox.Name = "addressIdTextBox";
             this.addressIdTextBox.ReadOnly = true;
             // 
             // activeCheckBox
             // 
-            resources.ApplyResources(this.activeCheckBox, "activeCheckBox");
             this.activeCheckBox.Checked = true;
             this.activeCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.activeCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("CheckState", this.customerBindingSource, "active", true));
+            resources.ApplyResources(this.activeCheckBox, "activeCheckBox");
             this.activeCheckBox.Name = "activeCheckBox";
             this.activeCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -329,8 +332,8 @@ namespace C969Scheduler
             // 
             // createdByTextBox
             // 
-            resources.ApplyResources(this.createdByTextBox, "createdByTextBox");
             this.createdByTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.customerBindingSource, "createdBy", true));
+            resources.ApplyResources(this.createdByTextBox, "createdByTextBox");
             this.createdByTextBox.Name = "createdByTextBox";
             this.createdByTextBox.ReadOnly = true;
             // 
@@ -343,8 +346,8 @@ namespace C969Scheduler
             // 
             // lastUpdateByTextBox
             // 
-            resources.ApplyResources(this.lastUpdateByTextBox, "lastUpdateByTextBox");
             this.lastUpdateByTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.customerBindingSource, "lastUpdateBy", true));
+            resources.ApplyResources(this.lastUpdateByTextBox, "lastUpdateByTextBox");
             this.lastUpdateByTextBox.Name = "lastUpdateByTextBox";
             this.lastUpdateByTextBox.ReadOnly = true;
             // 
@@ -369,39 +372,39 @@ namespace C969Scheduler
             // 
             // addBtn
             // 
-            resources.ApplyResources(this.addBtn, "addBtn");
             this.addBtn.Image = global::C969Scheduler.Properties.Resources._34237___add_plus_icon;
+            resources.ApplyResources(this.addBtn, "addBtn");
             this.addBtn.Name = "addBtn";
             this.addBtn.Click += new System.EventHandler(this.addBtn_Click);
             // 
             // toolStripSeparator1
             // 
-            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             this.toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             // 
             // updateBtn
             // 
-            resources.ApplyResources(this.updateBtn, "updateBtn");
             this.updateBtn.Image = global::C969Scheduler.Properties.Resources._24350_system_software_update_reload_actualizar_icon;
+            resources.ApplyResources(this.updateBtn, "updateBtn");
             this.updateBtn.Name = "updateBtn";
             this.updateBtn.Click += new System.EventHandler(this.updateBtn_Click);
             // 
             // toolStripSeparator2
             // 
-            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             this.toolStripSeparator2.Name = "toolStripSeparator2";
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             // 
             // deleteBtn
             // 
-            resources.ApplyResources(this.deleteBtn, "deleteBtn");
             this.deleteBtn.Image = global::C969Scheduler.Properties.Resources._23231_delete_icon;
+            resources.ApplyResources(this.deleteBtn, "deleteBtn");
             this.deleteBtn.Name = "deleteBtn";
             this.deleteBtn.Click += new System.EventHandler(this.deleteBtn_Click);
             // 
             // toolStripSeparator3
             // 
-            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
             this.toolStripSeparator3.Name = "toolStripSeparator3";
+            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
             // 
             // saveBtn
             // 
@@ -412,8 +415,8 @@ namespace C969Scheduler
             // 
             // toolStripSeparator4
             // 
-            resources.ApplyResources(this.toolStripSeparator4, "toolStripSeparator4");
             this.toolStripSeparator4.Name = "toolStripSeparator4";
+            resources.ApplyResources(this.toolStripSeparator4, "toolStripSeparator4");
             // 
             // cancelBtn
             // 
@@ -424,28 +427,28 @@ namespace C969Scheduler
             // 
             // toolStripSeparator5
             // 
-            resources.ApplyResources(this.toolStripSeparator5, "toolStripSeparator5");
             this.toolStripSeparator5.Name = "toolStripSeparator5";
+            resources.ApplyResources(this.toolStripSeparator5, "toolStripSeparator5");
             // 
             // toolStripSeparator6
             // 
-            resources.ApplyResources(this.toolStripSeparator6, "toolStripSeparator6");
             this.toolStripSeparator6.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.toolStripSeparator6.Name = "toolStripSeparator6";
+            resources.ApplyResources(this.toolStripSeparator6, "toolStripSeparator6");
             // 
             // closeBtn
             // 
-            resources.ApplyResources(this.closeBtn, "closeBtn");
             this.closeBtn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.closeBtn.Image = global::C969Scheduler.Properties.Resources._34217_close_delete_remove_icon;
+            resources.ApplyResources(this.closeBtn, "closeBtn");
             this.closeBtn.Name = "closeBtn";
             this.closeBtn.Click += new System.EventHandler(this.homeBtn_Click);
             // 
             // toolStripSeparator7
             // 
-            resources.ApplyResources(this.toolStripSeparator7, "toolStripSeparator7");
             this.toolStripSeparator7.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.toolStripSeparator7.Name = "toolStripSeparator7";
+            resources.ApplyResources(this.toolStripSeparator7, "toolStripSeparator7");
             // 
             // textBox1
             // 
@@ -472,7 +475,6 @@ namespace C969Scheduler
             // 
             // groupBox1
             // 
-            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Controls.Add(this.customerNameTextBox);
             this.groupBox1.Controls.Add(this.lastUpdateByTextBox);
             this.groupBox1.Controls.Add(lastUpdateByLabel);
@@ -489,18 +491,28 @@ namespace C969Scheduler
             this.groupBox1.Controls.Add(addressIdLabel);
             this.groupBox1.Controls.Add(activeLabel);
             this.groupBox1.Controls.Add(this.addressIdTextBox);
+            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
             // 
             // groupBox2
             // 
-            resources.ApplyResources(this.groupBox2, "groupBox2");
             this.groupBox2.Controls.Add(this.addAddressBtn);
             this.groupBox2.Controls.Add(this.textBox1);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.label2);
+            resources.ApplyResources(this.groupBox2, "groupBox2");
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.TabStop = false;
+            // 
+            // appointmentBindingSource
+            // 
+            this.appointmentBindingSource.DataMember = "appointment";
+            this.appointmentBindingSource.DataSource = this.dataSet1;
+            // 
+            // appointmentTableAdapter
+            // 
+            this.appointmentTableAdapter.ClearBeforeFill = true;
             // 
             // Customers
             // 
@@ -528,6 +540,7 @@ namespace C969Scheduler
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.appointmentBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -580,5 +593,7 @@ namespace C969Scheduler
         private System.Windows.Forms.Button addAddressBtn;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.BindingSource appointmentBindingSource;
+        private Properties.DataSet1TableAdapters.appointmentTableAdapter appointmentTableAdapter;
     }
 }

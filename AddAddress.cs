@@ -40,7 +40,11 @@ namespace C969Scheduler
             this.cityTableAdapter.Fill(this.dataSet1.city);
             // TODO: This line of code loads data into the 'dataSet1.address' table. You can move, or remove it, as needed.
             this.addressTableAdapter.Fill(this.dataSet1.address);
-
+            groupBox1.Enabled = false;
+            groupBox2.Enabled = false;
+            groupBox3.Enabled = false;
+            groupBox4.Enabled = false;
+            groupBox5.Enabled = false;
         }
 
         
@@ -73,9 +77,6 @@ namespace C969Scheduler
                 updateAddBtn.Enabled = false;
                 updateCityBtn.Enabled = false;
                 updateCountryBtn.Enabled = false;
-                deleteAddBtn.Enabled = false;
-                deleteCityBtn.Enabled = false;
-                deleteCountryBtn.Enabled = false;
                 if (isAdd)
                 {
                     groupBox1.Enabled = true;
@@ -119,9 +120,6 @@ namespace C969Scheduler
                 updateAddBtn.Enabled = true;
                 updateCityBtn.Enabled = true;
                 updateCountryBtn.Enabled = true;
-                deleteAddBtn.Enabled = true;
-                deleteCityBtn.Enabled = true;
-                deleteCountryBtn.Enabled = true;
                 groupBox1.Enabled = false;
                 groupBox2.Enabled = false;
                 groupBox3.Enabled = false;
@@ -135,16 +133,16 @@ namespace C969Scheduler
 
         
 
-        // Appointment Buttons --------------------------------------------------------------------------------------------------------------------------------------
+        // Address Buttons --------------------------------------------------------------------------------------------------------------------------------------
         private void addAddressBtn_Click(object sender, EventArgs e)
         {
             isAdd = true;
             EnableDisableBtns();
             addressBindingSource.AddNew();
-            createDateDateTimePicker.Value = DateTime.Now;
+            createDateDateTimePicker.Value = DateTime.UtcNow;
             createdByTextBox.Text = GVariables.userName;
             lastUpdateByTextBox.Text = GVariables.userName;
-            lastUpdateDateTimePicker.Value = DateTime.Now;
+            lastUpdateDateTimePicker.Value = DateTime.UtcNow;
         }
 
 
@@ -161,34 +159,10 @@ namespace C969Scheduler
             }
             EnableDisableBtns();
             lastUpdateByTextBox.Text = GVariables.userName;
-            lastUpdateDateTimePicker.Value = DateTime.Now;
+            lastUpdateDateTimePicker.Value = DateTime.UtcNow;
         }
                 
-        private void deleteAddBtn_Click(object sender, EventArgs e)
-        {
-            int rows;
-            rows = dataSet1.address.Rows.Count;
-            if (rows == 0)
-            {
-                MessageBox.Show(Properties.Resources.NoAddressSelected, Properties.Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-            if (MessageBox.Show(Properties.Resources.AreYouSureAddress, Properties.Resources.Delete, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                addressBindingSource.RemoveCurrent();
-                int r;
-                r = addressTableAdapter.Update(dataSet1.address);
-                if (r > 0)
-                {
-                    MessageBox.Show(Properties.Resources.AppDeleted);
-                }
-            }
-            else
-            {
-                MessageBox.Show(Properties.Resources.NothingDeleted);
-                return;
-            }
-        }
+        
                 
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         // City Buttons -----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -198,8 +172,8 @@ namespace C969Scheduler
             isCity = true;
             EnableDisableBtns();
             cityBindingSource.AddNew();
-            createDateDateTimePicker1.Value = DateTime.Now;
-            lastUpdateDateTimePicker1.Value = DateTime.Now;
+            createDateDateTimePicker1.Value = DateTime.UtcNow;
+            lastUpdateDateTimePicker1.Value = DateTime.UtcNow;
             createdByTextBox1.Text = GVariables.userName;
             lastUpdateByTextBox1.Text = GVariables.userName;
         }
@@ -218,36 +192,12 @@ namespace C969Scheduler
             }
             EnableDisableBtns();
             lastUpdateByTextBox1.Text = GVariables.userName;
-            lastUpdateDateTimePicker1.Value = DateTime.Now;
+            lastUpdateDateTimePicker1.Value = DateTime.UtcNow;
         }
 
 
-        private void deleteCityBtn_Click(object sender, EventArgs e)
-        {
-            int rows;
-            rows = dataSet1.city.Rows.Count;
-            if(rows == 0)
-            {
-                MessageBox.Show(Properties.Resources.NoCitySelected, Properties.Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-            if(MessageBox.Show(Properties.Resources.AreYouSureCity, Properties.Resources.Delete, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                cityBindingSource.RemoveCurrent();
-                int r;
-                r = cityTableAdapter.Update(dataSet1.city);
-                if(r > 0)
-                {
-                    MessageBox.Show(Properties.Resources.AppDeleted);
-                }
-
-            }
-            else
-            {
-                MessageBox.Show(Properties.Resources.NothingDeleted);
-                return;
-            }
-        }
+        
+        
 
 
         //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -259,8 +209,8 @@ namespace C969Scheduler
             isCountry = true;
             EnableDisableBtns();
             countryBindingSource.AddNew();
-            createDateDateTimePicker2.Value = DateTime.Now;
-            lastUpdateDateTimePicker2.Value = DateTime.Now;
+            createDateDateTimePicker2.Value = DateTime.UtcNow;
+            lastUpdateDateTimePicker2.Value = DateTime.UtcNow;
             createdByTextBox2.Text = GVariables.userName;
             lastUpdateByTextBox2.Text = GVariables.userName;
         }
@@ -278,36 +228,11 @@ namespace C969Scheduler
             }
             EnableDisableBtns();
             lastUpdateByTextBox2.Text = GVariables.userName;
-            lastUpdateDateTimePicker2.Value = DateTime.Now;
+            lastUpdateDateTimePicker2.Value = DateTime.UtcNow;
         }
 
 
-        private void deleteCountryBtn_Click(object sender, EventArgs e)
-        {
-            int rows;
-            rows = dataSet1.country.Rows.Count;
-            if (rows == 0)
-            {
-                MessageBox.Show(Properties.Resources.NoCountrySelected, Properties.Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-            if (MessageBox.Show(Properties.Resources.AreYouSureCountry, Properties.Resources.Delete, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                countryBindingSource.RemoveCurrent();
-                int r;
-                r = countryTableAdapter.Update(dataSet1.country);
-                if (r > 0)
-                {
-                    MessageBox.Show(Properties.Resources.AppDeleted);
-                }
-
-            }
-            else
-            {
-                MessageBox.Show(Properties.Resources.NothingDeleted);
-                return;
-            }
-        }
+        
         //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         // Save and Cancel buttons --------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -376,9 +301,22 @@ namespace C969Scheduler
             }
         }
 
-        private void countryIdLabel1_Click(object sender, EventArgs e)
-        {
+        
 
+        private void cityDataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if(cityDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() != null)
+            {
+                cityIdTextBox.Text = cityDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
+            }
+        }
+
+        private void countryDataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if(countryDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString() != null)
+            {
+                countryIdTextBox.Text = countryDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
+            }
         }
 
         private void cancelBtn_Click(object sender, EventArgs e)

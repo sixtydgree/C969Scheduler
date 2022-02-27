@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Globalization;
+using System.Linq;
+using System.Windows.Forms;
+using System.IO;
 
 namespace C969Scheduler
 {
@@ -15,6 +12,8 @@ namespace C969Scheduler
     {
         private bool isMonth;
         private int sevenDay;
+        private bool isUpdate;
+        private Appointments newApp;
         public MonthUserControl()
         {
             InitializeComponent();
@@ -28,6 +27,26 @@ namespace C969Scheduler
             {
                 int.TryParse(appointmentDataGridView.Rows[e.RowIndex].Cells[1].Value.ToString(), out GVariables.customerId);
                 customerInformationTableAdapter.FillById(dataSet1.customerInformation, GVariables.customerId);
+                appointmentIdTextBox.Text = appointmentDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
+                userIdTextBox.Text = appointmentDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
+                titleTextBox.Text = appointmentDataGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
+                descriptionTextBox.Text = appointmentDataGridView.Rows[e.RowIndex].Cells[4].Value.ToString();
+                locationTextBox.Text = appointmentDataGridView.Rows[e.RowIndex].Cells[5].Value.ToString();
+                contactComboBox.Text = appointmentDataGridView.Rows[e.RowIndex].Cells[6].Value.ToString();
+                typeComboBox.Text = appointmentDataGridView.Rows[e.RowIndex].Cells[7].Value.ToString();
+                urlTextBox.Text = appointmentDataGridView.Rows[e.RowIndex].Cells[8].Value.ToString();
+                DateTime date, date0, date1, date2;
+                DateTime.TryParse(appointmentDataGridView.Rows[e.RowIndex].Cells[9].Value.ToString(), out date);
+                startDateTimePicker.Value = date;
+                DateTime.TryParse(appointmentDataGridView.Rows[e.RowIndex].Cells[10].Value.ToString(), out date0);
+                endDateTimePicker.Value = date0;
+                DateTime.TryParse(appointmentDataGridView.Rows[e.RowIndex].Cells[11].Value.ToString(), out date1);
+                createDateDateTimePicker.Value = date1;
+                createdByTextBox.Text = appointmentDataGridView.Rows[e.RowIndex].Cells[12].Value.ToString();
+                DateTime.TryParse(appointmentDataGridView.Rows[e.RowIndex].Cells[13].Value.ToString(), out date2);
+                lastUpdateDateTimePicker.Value = date2;
+                lastUpdateByTextBox.Text = appointmentDataGridView.Rows[e.RowIndex].Cells[14].Value.ToString();
+
             }
         }
 
@@ -78,14 +97,35 @@ namespace C969Scheduler
         }
         //----------------------------------------------------------------------------------------------------------------------------------------------------------
 
+        //correct input colors -------------------------------------------------------------------------------------------------------------------------------------
+        private void ReturnInputColors()
+        {
+            customerIdTextBox.BackColor = Color.White;
+            titleTextBox.BackColor = Color.White;
+            descriptionTextBox.BackColor = Color.White;
+            locationTextBox.BackColor = Color.White;
+            contactComboBox.BackColor = Color.White;
+            typeComboBox.BackColor = Color.White;
+            urlTextBox.BackColor = Color.White;
+            startDateTimePicker.BackColor = Color.White;
+            endDateTimePicker.BackColor = Color.White;
+        }
+
+
+        //----------------------------------------------------------------------------------------------------------------------------------------------------------
+
         // Load properties and dates -------------------------------------------------------------------------------------------------------------------------------
         private void MonthUserControl_Load(object sender, EventArgs e)
         {
+            appointmentTableAdapter.Fill(dataSet1.appointment);
+            customerTableAdapter.Fill(dataSet1.customer);
             label3.Text = Properties.Resources.Current + " " + GVariables.userName;
             isMonth = true;
+            isUpdate = false;
+            
             GVariables.type = new List<string>();
             GVariables.contact = new List<string>();
-            
+            customerInformationTableAdapter.Fill(dataSet1.customerInformation);
             string[] types =
             {
                 "Scrum",
@@ -111,7 +151,11 @@ namespace C969Scheduler
             {
                 GVariables.contact.AddRange(contacts);
             }
-            
+
+
+
+            TimeZone timeZone = TimeZone.CurrentTimeZone;
+            TimeSpan currentOffset = timeZone.GetUtcOffset(DateTime.Now);
             GVariables.nowDate = DateTime.Now;
             GVariables.month = GVariables.nowDate.Month;
             GVariables.year = GVariables.nowDate.Year;
@@ -119,14 +163,36 @@ namespace C969Scheduler
             GVariables.monthNm = DateTimeFormatInfo.CurrentInfo.GetMonthName(GVariables.month);
             GVariables.day = GVariables.firstOfMonth.Day;
             DateTime.TryParse(GVariables.month + "-" + GVariables.day + "-" + GVariables.year, out GVariables.date1);
-            GVariables.endOfMonth = DateTime.DaysInMonth(GVariables.year, GVariables.month);
-            DateTime.TryParse(GVariables.month + "-" + GVariables.endOfMonth + "-" + GVariables.year, out GVariables.date2);
-            appointmentTableAdapter.FillByDate(dataSet1.appointment, GVariables.date1, GVariables.date2);
+            int mnth = GVariables.month;
+            GVariables.nextMonth = ++mnth;
+            DateTime.TryParse(GVariables.nextMonth + "-" + GVariables.day + "-" + GVariables.year, out GVariables.date2);
+            //appointmentTableAdapter.FillByDate(dataSet1.appointment, GVariables.date1, GVariables.date2);
+
+            // create and sort data for the datagrid ---------------------------------------------------------
+            Collections appointments = new Collections();
+            var apps = from a in dataSet1.appointment
+                       select a;
+
+            foreach (var a in apps)
+            {
+                newApp = new Appointments(a.appointmentId, a.customerId, a.userId, a.title, a.description, a.location, a.contact, a.type, a.url, a.start.ToLocalTime(), a.end.ToLocalTime(), a.createDate.ToLocalTime(), a.createdBy,
+                    a.lastUpdate.ToLocalTime(), a.lastUpdateBy);
+                appointments.addAppBC(newApp);
+            }
+
+            var monthApps = from a in appointments.appointmentsByConsultant
+                            where a.Start > GVariables.date1 && a.Start < GVariables.date2
+                            select new {a.AppointmentId, a.CustomerId, a.UserId, a.Title, a.Description, a.Location, a.Contact, a.Type, a.Url, a.Start, a.End, a.CreateDate, a.CreatedBy, a.LastUpdate, a.LastUpdateBy };
+
+            appointmentDataGridView.DataSource = monthApps.ToList();
+            //-------------------------------------------------------------------------------------------------------------
+
             monthYearTxt.Text = GVariables.monthNm + " " + GVariables.year;
             this.saveBtn.Enabled = false;
             this.cancelBtn.Enabled = false;
             this.appointmentDataGridView.Enabled = true;
             this.groupBox1.Enabled = false;
+            this.groupBox3.Enabled = false;
             appointmentDataGridView.ClearSelection();
             foreach(string type in GVariables.type)
             {
@@ -136,12 +202,15 @@ namespace C969Scheduler
             {
                 contactComboBox.Items.Add(contact);
             }
+            AppointmentReminder();
+            timer1.Start();
         }
         //-----------------------------------------------------------------------------------------------------------------------------------------------
 
         // add, update, delete buttons ------------------------------------------------------------------------------------------------------------------
         private void addBtn_Click(object sender, EventArgs e)
         {
+            appointmentIdTextBox.Text = "";
             customerInformationTableAdapter.Fill(dataSet1.customerInformation);
             EnableDisableBtns();
             //add new appointment
@@ -149,8 +218,8 @@ namespace C969Scheduler
             userIdTextBox.Text = GVariables.userId.ToString();
             lastUpdateByTextBox.Text = GVariables.userName;
             createdByTextBox.Text = GVariables.userName;
-            createDateDateTimePicker.Value = DateTime.Now;
-            lastUpdateDateTimePicker.Value = DateTime.Now;
+            createDateDateTimePicker.Value = DateTime.UtcNow;
+            lastUpdateDateTimePicker.Value = DateTime.UtcNow;
         }
 
         private void updateBtn_Click(object sender, EventArgs e)
@@ -167,32 +236,53 @@ namespace C969Scheduler
             userIdTextBox.Text = GVariables.userId.ToString();
             lastUpdateByTextBox.Text = GVariables.userName;
             lastUpdateDateTimePicker.Value = DateTime.Now;
+            isUpdate = true;
         }
 
         private void deleteBtn_Click(object sender, EventArgs e)
         {
-            int rows;
-            rows = dataSet1.appointment.Rows.Count;
-            if(rows == 0)
+            if(appointmentDataGridView.SelectedRows.Count == 0)
             {
                 MessageBox.Show(Properties.Resources.NoAppointmentSelected, Properties.Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             if(MessageBox.Show(Properties.Resources.AreYouSure, Properties.Resources.Delete, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                appointmentBindingSource.RemoveCurrent();
-                int r;
-                r = appointmentTableAdapter.Update(dataSet1.appointment);
-                if (r > 0)
+                string appId = appointmentIdTextBox.Text;
+                string sql = "DELETE FROM `appointment` WHERE (`appointmentId` = '" + appId + "');";
+                try
                 {
-                    MessageBox.Show(Properties.Resources.AppDeleted);
+                    DbAccess dbAccess = new DbAccess();
+                    dbAccess.Open();
+                    dbAccess.ExecuteNonQuery(sql);
+                    dbAccess.Close();
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, Properties.Resources.NothingDeleted);
+                    return;
+                }
+                MessageBox.Show(Properties.Resources.AppDeleted);
+                appointmentTableAdapter.Fill(dataSet1.appointment);
+                Collections appointments = new Collections();
+                appointments.emptyAppBC();
+                var apps = from a in dataSet1.appointment
+                           select a;
+
+                foreach (var a in apps)
+                {
+                    Appointments newApp = new Appointments(a.appointmentId, a.customerId, a.userId, a.title, a.description, a.location, a.contact, a.type, a.url, a.start.ToLocalTime(), a.end.ToLocalTime(), a.createDate.ToLocalTime(), a.createdBy,
+                         a.lastUpdate.ToLocalTime(), a.lastUpdateBy);
+                    appointments.addAppBC(newApp);
+                }
+
+                var monthApps = from a in appointments.appointmentsByConsultant
+                                where a.Start > GVariables.date1 && a.Start < GVariables.date2
+                                select new { a.AppointmentId, a.CustomerId, a.UserId, a.Title, a.Description, a.Location, a.Contact, a.Type, a.Url, a.Start, a.End, a.CreateDate, a.CreatedBy, a.LastUpdate, a.LastUpdateBy };
+
+                appointmentDataGridView.DataSource = monthApps.ToList();
             }
-            else
-            {
-                MessageBox.Show(Properties.Resources.NothingDeleted);
-                return;
-            }
+            
 
         }
         //-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -200,29 +290,104 @@ namespace C969Scheduler
         // Save and cancel buttons ----------------------------------------------------------------------------------------------------------------------------------
         private void saveBtn_Click(object sender, EventArgs e)
         {
-            if(DateIsFuture() == true && DateNotTaken() == true && CheckInputs() == true && InsideWorkHours() == true)
+            if(isUpdate == true)
             {
-                EnableDisableBtns();
-                // save changed or new appointment
-                appointmentBindingSource.EndEdit();
-                int r;
-                r = appointmentTableAdapter.Update(dataSet1.appointment);
-                if (r > 0)
+                
+                if(CheckInputs() == true && InsideWorkHours() == true)
                 {
-                    MessageBox.Show(Properties.Resources.Saved);
-                }
-                else
-                {
-                    MessageBox.Show(Properties.Resources.NothingSaved);
-                    return;
+                    EnableDisableBtns();
+                    ReturnInputColors();
+                    int _appId, _cusId, _userId;
+                    int.TryParse(appointmentIdTextBox.Text, out _appId);
+                    int.TryParse(customerIdTextBox.Text, out _cusId);
+                    int.TryParse(userIdTextBox.Text, out _userId);
+                    
+                    string _start, _end, _crD, _laU;
+                    _start = startDateTimePicker.Value.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss");
+                    _end = endDateTimePicker.Value.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss");
+                    _crD = createDateDateTimePicker.Value.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss");
+                    _laU = lastUpdateDateTimePicker.Value.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss");
+                    
+                    DbAccess dbAccess = new DbAccess();
+                    dbAccess.Open();
+                    string sql = "UPDATE `appointment` SET `customerId` = '" + customerIdTextBox.Text + "', `userId` = '" + userIdTextBox.Text + "', `title` = '" + titleTextBox.Text + "', `description` = '" + descriptionTextBox.Text + "', `location` = '" + locationTextBox.Text + "', `contact` = '" + contactComboBox.Text + "', " +
+                        "`type` = '" + typeComboBox.Text + "', `url` = '" + urlTextBox.Text + "', `start` = '" + _start + "', `end` = '" + _end + "', `createDate` = '" + _crD + "'" +
+                        ", `createdBy` = '" + createdByTextBox.Text + "', `lastUpdate` = '" + _laU + "', `lastUpdateBy` = '" + lastUpdateByTextBox.Text + "'  WHERE (`appointmentId` = '" + _appId + "');";
+                    dbAccess.ExecuteNonQuery(sql);
+                    dbAccess.Close();
+
+                    
+                    appointmentTableAdapter.Fill(dataSet1.appointment);
+                    Collections appointments = new Collections();
+                    appointments.emptyAppBC();
+                    var apps = from a in dataSet1.appointment
+                               select a;
+
+                    foreach (var a in apps)
+                    {
+                       Appointments newApp = new Appointments(a.appointmentId, a.customerId, a.userId, a.title, a.description, a.location, a.contact, a.type, a.url, a.start.ToLocalTime(), a.end.ToLocalTime(), a.createDate.ToLocalTime(), a.createdBy,
+                            a.lastUpdate.ToLocalTime(), a.lastUpdateBy);
+                        appointments.addAppBC(newApp);
+                    }
+
+                    var monthApps = from a in appointments.appointmentsByConsultant
+                                    where a.Start > GVariables.date1 && a.Start < GVariables.date2
+                                    select new { a.AppointmentId, a.CustomerId, a.UserId, a.Title, a.Description, a.Location, a.Contact, a.Type, a.Url, a.Start, a.End, a.CreateDate, a.CreatedBy, a.LastUpdate, a.LastUpdateBy };
+
+                    appointmentDataGridView.DataSource = monthApps.ToList();
                 }
             }
+            else
+            {
+                if (DateIsFuture() == true && DateNotTaken() == true && CheckInputs() == true && InsideWorkHours() == true)
+                {
+                    EnableDisableBtns();
+                    ReturnInputColors();
+                    // save changed or new appointment
+                    startDateTimePicker.Value = startDateTimePicker.Value.ToUniversalTime();
+                    endDateTimePicker.Value = endDateTimePicker.Value.ToUniversalTime();
+
+                    appointmentBindingSource.EndEdit();
+                    int r;
+                    r = appointmentTableAdapter.Update(dataSet1.appointment);
+                    if (r > 0)
+                    {
+                        MessageBox.Show(Properties.Resources.Saved);
+                    }
+                    else
+                    {
+                        MessageBox.Show(Properties.Resources.NothingSaved);
+                        return;
+                    }
+
+                    appointmentTableAdapter.Fill(dataSet1.appointment);
+                    Collections appointments = new Collections();
+                    var apps = from a in dataSet1.appointment
+                               select a;
+
+                    foreach (var a in apps)
+                    {
+                        newApp = new Appointments(a.appointmentId, a.customerId, a.userId, a.title, a.description, a.location, a.contact, a.type, a.url, a.start.ToLocalTime(), a.end.ToLocalTime(), a.createDate.ToLocalTime(), a.createdBy,
+                            a.lastUpdate.ToLocalTime(), a.lastUpdateBy);
+                        appointments.addAppBC(newApp);
+                    }
+
+                    var monthApps = from a in appointments.appointmentsByConsultant
+                                    where a.Start > GVariables.date1 && a.Start < GVariables.date2
+                                    select new { a.AppointmentId, a.CustomerId, a.UserId, a.Title, a.Description, a.Location, a.Contact, a.Type, a.Url, a.Start, a.End, a.CreateDate, a.CreatedBy, a.LastUpdate, a.LastUpdateBy };
+
+                    appointmentDataGridView.DataSource = monthApps.ToList();
+
+                }
+            }
+            
             
         }
 
         private void cancelBtn_Click(object sender, EventArgs e)
         {
             EnableDisableBtns();
+            ReturnInputColors();
             // cancel changes to appointments
             dataSet1.appointment.RejectChanges();
             appointmentBindingSource.CancelEdit();
@@ -242,13 +407,37 @@ namespace C969Scheduler
                     GVariables.year--;
                     GVariables.month = 12;
                 }
+                TimeZone timeZone = TimeZone.CurrentTimeZone;
+                TimeSpan currentOffset = timeZone.GetUtcOffset(DateTime.Now);
                 GVariables.firstOfMonth = new DateTime(GVariables.year, GVariables.month, 1);
                 GVariables.monthNm = DateTimeFormatInfo.CurrentInfo.GetMonthName(GVariables.month);
                 GVariables.day = GVariables.firstOfMonth.Day;
                 DateTime.TryParse(GVariables.month + "-" + GVariables.day + "-" + GVariables.year, out GVariables.date1);
-                GVariables.endOfMonth = DateTime.DaysInMonth(GVariables.year, GVariables.month);
-                DateTime.TryParse(GVariables.month + "-" + GVariables.endOfMonth + "-" + GVariables.year, out GVariables.date2);
-                appointmentTableAdapter.FillByDate(dataSet1.appointment, GVariables.date1, GVariables.date2);
+                int mnth = GVariables.month;
+                GVariables.nextMonth = ++mnth;
+                DateTime.TryParse(GVariables.nextMonth + "-" + GVariables.day + "-" + GVariables.year, out GVariables.date2);
+                //appointmentTableAdapter.FillByDate(dataSet1.appointment, currentOffset.ToString().Substring(0, 6), GVariables.date1, GVariables.date2);
+
+                // create and sort data for the datagrid ---------------------------------------------------------
+                appointmentTableAdapter.Fill(dataSet1.appointment);
+                Collections appointments = new Collections();
+                var apps = from a in dataSet1.appointment
+                           select a;
+
+                foreach (var a in apps)
+                {
+                    newApp = new Appointments(a.appointmentId, a.customerId, a.userId, a.title, a.description, a.location, a.contact, a.type, a.url, a.start.ToLocalTime(), a.end.ToLocalTime(), a.createDate.ToLocalTime(), a.createdBy,
+                        a.lastUpdate.ToLocalTime(), a.lastUpdateBy);
+                    appointments.addAppBC(newApp);
+                }
+
+                var monthApps = from a in appointments.appointmentsByConsultant
+                                where a.Start > GVariables.date1 && a.Start < GVariables.date2
+                                select new { a.AppointmentId, a.CustomerId, a.UserId, a.Title, a.Description, a.Location, a.Contact, a.Type, a.Url, a.Start, a.End, a.CreateDate, a.CreatedBy, a.LastUpdate, a.LastUpdateBy };
+
+                appointmentDataGridView.DataSource = monthApps.ToList();
+                //-------------------------------------------------------------------------------------------------------------
+
                 monthYearTxt.Text = GVariables.monthNm + " " + GVariables.year;
             }
             else
@@ -271,8 +460,31 @@ namespace C969Scheduler
                 {
                     sevenDay = DateTime.DaysInMonth(GVariables.year, GVariables.month);
                 }
+                TimeZone timeZone = TimeZone.CurrentTimeZone;
+                TimeSpan currentOffset = timeZone.GetUtcOffset(DateTime.Now);
                 DateTime.TryParse(GVariables.month + "-" + sevenDay + "-" + GVariables.year, out GVariables.date2);
-                appointmentTableAdapter.FillByDate(dataSet1.appointment, GVariables.date1, GVariables.date2);
+                //appointmentTableAdapter.FillByDate(dataSet1.appointment, currentOffset.ToString().Substring(0, 6), GVariables.date1, GVariables.date2);
+
+                // create and sort data for the datagrid ---------------------------------------------------------
+                appointmentTableAdapter.Fill(dataSet1.appointment);
+                Collections appointments = new Collections();
+                var apps = from a in dataSet1.appointment
+                           select a;
+
+                foreach (var a in apps)
+                {
+                    newApp = new Appointments(a.appointmentId, a.customerId, a.userId, a.title, a.description, a.location, a.contact, a.type, a.url, a.start.ToLocalTime(), a.end.ToLocalTime(), a.createDate.ToLocalTime(), a.createdBy,
+                        a.lastUpdate.ToLocalTime(), a.lastUpdateBy);
+                    appointments.addAppBC(newApp);
+                }
+
+                var monthApps = from a in appointments.appointmentsByConsultant
+                                where a.Start > GVariables.date1 && a.Start < GVariables.date2
+                                select new { a.AppointmentId, a.CustomerId, a.UserId, a.Title, a.Description, a.Location, a.Contact, a.Type, a.Url, a.Start, a.End, a.CreateDate, a.CreatedBy, a.LastUpdate, a.LastUpdateBy };
+
+                appointmentDataGridView.DataSource = monthApps.ToList();
+                //-------------------------------------------------------------------------------------------------------------
+
                 monthYearTxt.Text = "Days of " + GVariables.day + " - " + sevenDay + " " + GVariables.monthNm + " " + GVariables.year;
             }
         }
@@ -287,13 +499,38 @@ namespace C969Scheduler
                     GVariables.year++;
                     GVariables.month = 1;
                 }
+                TimeZone timeZone = TimeZone.CurrentTimeZone;
+                TimeSpan currentOffset = timeZone.GetUtcOffset(DateTime.Now);
                 GVariables.firstOfMonth = new DateTime(GVariables.year, GVariables.month, 1);
                 GVariables.monthNm = DateTimeFormatInfo.CurrentInfo.GetMonthName(GVariables.month);
                 GVariables.day = GVariables.firstOfMonth.Day;
                 DateTime.TryParse(GVariables.month + "-" + GVariables.day + "-" + GVariables.year, out GVariables.date1);
-                GVariables.endOfMonth = DateTime.DaysInMonth(GVariables.year, GVariables.month);
-                DateTime.TryParse(GVariables.month + "-" + GVariables.endOfMonth + "-" + GVariables.year, out GVariables.date2);
-                appointmentTableAdapter.FillByDate(dataSet1.appointment, GVariables.date1, GVariables.date2);
+                int mnth = GVariables.month;
+                GVariables.nextMonth = ++mnth;
+                DateTime.TryParse(GVariables.nextMonth + "-" + GVariables.day + "-" + GVariables.year, out GVariables.date2);
+                //appointmentTableAdapter.FillByDate(dataSet1.appointment, currentOffset.ToString().Substring(0, 6), GVariables.date1, GVariables.date2);
+
+                // create and sort data for the datagrid ---------------------------------------------------------
+                appointmentTableAdapter.Fill(dataSet1.appointment);
+                Collections appointments = new Collections();
+                var apps = from a in dataSet1.appointment
+                           select a;
+
+                foreach (var a in apps)
+                {
+                    newApp = new Appointments(a.appointmentId, a.customerId, a.userId, a.title, a.description, a.location, a.contact, a.type, a.url, a.start.ToLocalTime(), a.end.ToLocalTime(), a.createDate.ToLocalTime(), a.createdBy,
+                        a.lastUpdate.ToLocalTime(), a.lastUpdateBy);
+                    appointments.addAppBC(newApp);
+                }
+
+                var monthApps = from a in appointments.appointmentsByConsultant
+                                where a.Start > GVariables.date1 && a.Start < GVariables.date2
+                                orderby a.Start
+                                select new { a.AppointmentId, a.CustomerId, a.UserId, a.Title, a.Description, a.Location, a.Contact, a.Type, a.Url, a.Start, a.End, a.CreateDate, a.CreatedBy, a.LastUpdate, a.LastUpdateBy };
+
+                appointmentDataGridView.DataSource = monthApps.ToList();
+                //-------------------------------------------------------------------------------------------------------------
+
                 monthYearTxt.Text = GVariables.monthNm + " " + GVariables.year;
             }
             else
@@ -316,8 +553,33 @@ namespace C969Scheduler
                 {
                     sevenDay = DateTime.DaysInMonth(GVariables.year, GVariables.month);
                 }
+                TimeZone timeZone = TimeZone.CurrentTimeZone;
+                TimeSpan currentOffset = timeZone.GetUtcOffset(DateTime.Now);
                 DateTime.TryParse(GVariables.month + "-" + sevenDay + "-" + GVariables.year, out GVariables.date2);
-                appointmentTableAdapter.FillByDate(dataSet1.appointment, GVariables.date1, GVariables.date2);
+                //appointmentTableAdapter.FillByDate(dataSet1.appointment, currentOffset.ToString().Substring(0, 6), GVariables.date1, GVariables.date2);
+
+                // create and sort data for the datagrid ---------------------------------------------------------
+                appointmentTableAdapter.Fill(dataSet1.appointment);
+                Collections appointments = new Collections();
+                var apps = from a in dataSet1.appointment
+                           select a;
+
+                foreach (var a in apps)
+                {
+                    newApp = new Appointments(a.appointmentId, a.customerId, a.userId, a.title, a.description, a.location, a.contact, a.type, a.url, a.start.ToLocalTime(), a.end.ToLocalTime(), a.createDate.ToLocalTime(), a.createdBy,
+                        a.lastUpdate.ToLocalTime(), a.lastUpdateBy);
+                    appointments.addAppBC(newApp);
+                }
+
+                var monthApps = from a in appointments.appointmentsByConsultant
+                                where a.Start > GVariables.date1 && a.Start < GVariables.date2
+                                orderby a.Start
+                                select new { a.AppointmentId, a.CustomerId, a.UserId, a.Title, a.Description, a.Location, a.Contact, a.Type, a.Url, a.Start, a.End, a.CreateDate, a.CreatedBy, a.LastUpdate, a.LastUpdateBy };
+
+                appointmentDataGridView.DataSource = monthApps.ToList();
+                //-------------------------------------------------------------------------------------------------------------
+
+
                 monthYearTxt.Text = "Days of " + GVariables.day + " - " + sevenDay + " " + GVariables.monthNm + " " + GVariables.year;
             }
             
@@ -327,6 +589,8 @@ namespace C969Scheduler
         {
             if (isMonth)
             {
+                TimeZone timeZone = TimeZone.CurrentTimeZone;
+                TimeSpan currentOffset = timeZone.GetUtcOffset(DateTime.Now);
                 GVariables.nowDate = DateTime.Now;
                 GVariables.month = GVariables.nowDate.Month;
                 GVariables.year = GVariables.nowDate.Year;
@@ -334,13 +598,38 @@ namespace C969Scheduler
                 GVariables.monthNm = DateTimeFormatInfo.CurrentInfo.GetMonthName(GVariables.month);
                 GVariables.day = GVariables.firstOfMonth.Day;
                 DateTime.TryParse(GVariables.month + "-" + GVariables.day + "-" + GVariables.year, out GVariables.date1);
-                GVariables.endOfMonth = DateTime.DaysInMonth(GVariables.year, GVariables.month);
-                DateTime.TryParse(GVariables.month + "-" + GVariables.endOfMonth + "-" + GVariables.year, out GVariables.date2);
-                appointmentTableAdapter.FillByDate(dataSet1.appointment, GVariables.date1, GVariables.date2);
+                int mnth = GVariables.month;
+                GVariables.nextMonth = ++mnth;
+                DateTime.TryParse(GVariables.nextMonth + "-" + GVariables.day + "-" + GVariables.year, out GVariables.date2);
+                //appointmentTableAdapter.FillByDate(dataSet1.appointment, currentOffset.ToString().Substring(0, 6), GVariables.date1, GVariables.date2);
+
+                // create and sort data for the datagrid ---------------------------------------------------------
+                appointmentTableAdapter.Fill(dataSet1.appointment);
+                Collections appointments = new Collections();
+                var apps = from a in dataSet1.appointment
+                           select a;
+
+                foreach (var a in apps)
+                {
+                   newApp = new Appointments(a.appointmentId, a.customerId, a.userId, a.title, a.description, a.location, a.contact, a.type, a.url, a.start.ToLocalTime(), a.end.ToLocalTime(), a.createDate.ToLocalTime(), a.createdBy,
+                        a.lastUpdate.ToLocalTime(), a.lastUpdateBy);
+                    appointments.addAppBC(newApp);
+                }
+
+                var monthApps = from a in appointments.appointmentsByConsultant
+                                where a.Start > GVariables.date1 && a.Start < GVariables.date2
+                                orderby a.Start
+                                select new { a.AppointmentId, a.CustomerId, a.UserId, a.Title, a.Description, a.Location, a.Contact, a.Type, a.Url, a.Start, a.End, a.CreateDate, a.CreatedBy, a.LastUpdate, a.LastUpdateBy };
+
+                appointmentDataGridView.DataSource = monthApps.ToList();
+                //-------------------------------------------------------------------------------------------------------------
+
                 monthYearTxt.Text = GVariables.monthNm + " " + GVariables.year;
             }
             else
             {
+                TimeZone timeZone = TimeZone.CurrentTimeZone;
+                TimeSpan currentOffset = timeZone.GetUtcOffset(DateTime.Now);
                 GVariables.nowDate = DateTime.Now;
                 GVariables.month = GVariables.nowDate.Month;
                 GVariables.year = GVariables.nowDate.Year;
@@ -353,7 +642,29 @@ namespace C969Scheduler
                     sevenDay = DateTime.DaysInMonth(GVariables.year, GVariables.month);
                 }
                 DateTime.TryParse(GVariables.month + "-" + sevenDay + "-" + GVariables.year, out GVariables.date2);
-                appointmentTableAdapter.FillByDate(dataSet1.appointment, GVariables.date1, GVariables.date2);
+                //appointmentTableAdapter.FillByDate(dataSet1.appointment, currentOffset.ToString().Substring(0, 6), GVariables.date1, GVariables.date2);
+
+                // create and sort data for the datagrid ---------------------------------------------------------
+                appointmentTableAdapter.Fill(dataSet1.appointment);
+                Collections appointments = new Collections();
+                var apps = from a in dataSet1.appointment
+                           select a;
+
+                foreach (var a in apps)
+                {
+                    newApp = new Appointments(a.appointmentId, a.customerId, a.userId, a.title, a.description, a.location, a.contact, a.type, a.url, a.start.ToLocalTime(), a.end.ToLocalTime(), a.createDate.ToLocalTime(), a.createdBy,
+                        a.lastUpdate.ToLocalTime(), a.lastUpdateBy);
+                    appointments.addAppBC(newApp);
+                }
+
+                var monthApps = from a in appointments.appointmentsByConsultant
+                                where a.Start > GVariables.date1 && a.Start < GVariables.date2
+                                orderby a.Start
+                                select new { a.AppointmentId, a.CustomerId, a.UserId, a.Title, a.Description, a.Location, a.Contact, a.Type, a.Url, a.Start, a.End, a.CreateDate, a.CreatedBy, a.LastUpdate, a.LastUpdateBy };
+
+                appointmentDataGridView.DataSource = monthApps.ToList();
+                //-------------------------------------------------------------------------------------------------------------
+
                 monthYearTxt.Text = "Days of " + GVariables.day + " - " + sevenDay + " " + GVariables.monthNm + " " + GVariables.year;
             }
             
@@ -441,8 +752,8 @@ namespace C969Scheduler
             else
             {
                 MessageBox.Show(Properties.Resources.CannotBookInPast, Properties.Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                startDateTimePicker.CalendarMonthBackground = Color.Coral;
-                endDateTimePicker.CalendarMonthBackground = Color.Coral;
+                startDateTimePicker.BackColor = Color.Coral;
+                endDateTimePicker.BackColor = Color.Coral;
                 return false;
             }
         }
@@ -457,13 +768,13 @@ namespace C969Scheduler
             if (dataSet1.appointment.Any(a => a.start >= date && a.start <= endDate) == true && dataSet1.appointment.Any(a => a.contact == contactComboBox.Text) == true)
             {
                 MessageBox.Show(Properties.Resources.DateTaken, Properties.Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                startDateTimePicker.CalendarMonthBackground = Color.Coral;
+                startDateTimePicker.BackColor = Color.Coral;
                 contactComboBox.BackColor = Color.Coral;
                 return false;
             }else if(dataSet1.appointment.Any(a => a.end >= date && a.end <= endDate) == true && dataSet1.appointment.Any(a => a.contact == contactComboBox.Text) == true)
             {
                 MessageBox.Show(Properties.Resources.DateTaken, Properties.Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                endDateTimePicker.CalendarMonthBackground = Color.Coral;
+                endDateTimePicker.BackColor = Color.Coral;
                 contactComboBox.BackColor = Color.Coral;
                 return false;
             }
@@ -480,12 +791,12 @@ namespace C969Scheduler
             if (time.Hour < 9 && time.Hour > 17)
             {
                 MessageBox.Show(Properties.Resources.OutsideHours, Properties.Resources.Closed, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                startDateTimePicker.CalendarMonthBackground = Color.Coral;
+                startDateTimePicker.BackColor = Color.Coral;
                 return false;
             }else if(time2.Hour < 9 && time2.Hour > 17)
             {
                 MessageBox.Show(Properties.Resources.OutsideHours, Properties.Resources.Closed, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                endDateTimePicker.CalendarMonthBackground = Color.Coral;
+                endDateTimePicker.BackColor = Color.Coral;
                 return false;
             }
             else
@@ -495,12 +806,15 @@ namespace C969Scheduler
         }
         //-----------------------------------------------------------------------------------------------------------------------------------------------
 
-        // buttons to change between month and week views
+        // buttons to change between month and week views -----------------------------------------------------------------------------------------------
         private void monthBtn_Click(object sender, EventArgs e)
         {
+            appointmentTableAdapter.Fill(dataSet1.appointment);
             isMonth = true;
             nextBtn.Text = Properties.Resources.NextM;
             prevBtn.Text = Properties.Resources.PrevM;
+            TimeZone timeZone = TimeZone.CurrentTimeZone;
+            TimeSpan currentOffset = timeZone.GetUtcOffset(DateTime.Now);
             GVariables.nowDate = DateTime.Now;
             GVariables.month = GVariables.nowDate.Month;
             GVariables.year = GVariables.nowDate.Year;
@@ -508,17 +822,42 @@ namespace C969Scheduler
             GVariables.monthNm = DateTimeFormatInfo.CurrentInfo.GetMonthName(GVariables.month);
             GVariables.day = GVariables.firstOfMonth.Day;
             DateTime.TryParse(GVariables.month + "-" + GVariables.day + "-" + GVariables.year, out GVariables.date1);
-            GVariables.endOfMonth = DateTime.DaysInMonth(GVariables.year, GVariables.month);
-            DateTime.TryParse(GVariables.month + "-" + GVariables.endOfMonth + "-" + GVariables.year, out GVariables.date2);
-            appointmentTableAdapter.FillByDate(dataSet1.appointment, GVariables.date1, GVariables.date2);
+            int mnth = GVariables.month;
+            GVariables.nextMonth = ++mnth;
+            DateTime.TryParse(GVariables.nextMonth + "-" + GVariables.day + "-" + GVariables.year, out GVariables.date2);
+            //appointmentTableAdapter.FillByDate(dataSet1.appointment, currentOffset.ToString().Substring(0, 6), GVariables.date1, GVariables.date2);
+
+            // create and sort data for the datagrid ---------------------------------------------------------
+            Collections appointments = new Collections();
+            var apps = from a in dataSet1.appointment
+                       select a;
+
+            foreach (var a in apps)
+            {
+                newApp = new Appointments(a.appointmentId, a.customerId, a.userId, a.title, a.description, a.location, a.contact, a.type, a.url, a.start.ToLocalTime(), a.end.ToLocalTime(), a.createDate.ToLocalTime(), a.createdBy,
+                    a.lastUpdate.ToLocalTime(), a.lastUpdateBy);
+                appointments.addAppBC(newApp);
+            }
+
+            var monthApps = from a in appointments.appointmentsByConsultant
+                            where a.Start > GVariables.date1 && a.Start < GVariables.date2
+                            orderby a.Start
+                            select new { a.AppointmentId, a.CustomerId, a.UserId, a.Title, a.Description, a.Location, a.Contact, a.Type, a.Url, a.Start, a.End, a.CreateDate, a.CreatedBy, a.LastUpdate, a.LastUpdateBy };
+
+            appointmentDataGridView.DataSource = monthApps.ToList();
+            //-------------------------------------------------------------------------------------------------------------
+
             monthYearTxt.Text = GVariables.monthNm + " " + GVariables.year;
         }
 
         private void weekBtn_Click(object sender, EventArgs e)
         {
+            appointmentTableAdapter.Fill(dataSet1.appointment);
             isMonth = false;
             nextBtn.Text = Properties.Resources.NextW;
             prevBtn.Text = Properties.Resources.PrevW;
+            TimeZone timeZone = TimeZone.CurrentTimeZone;
+            TimeSpan currentOffset = timeZone.GetUtcOffset(DateTime.Now);
             GVariables.nowDate = DateTime.Now;
             GVariables.month = GVariables.nowDate.Month;
             GVariables.year = GVariables.nowDate.Year;
@@ -531,10 +870,95 @@ namespace C969Scheduler
                 sevenDay = DateTime.DaysInMonth(GVariables.year, GVariables.month);
             }
             DateTime.TryParse(GVariables.month + "-" + sevenDay + "-" + GVariables.year, out GVariables.date2);
-            appointmentTableAdapter.FillByDate(dataSet1.appointment, GVariables.date1, GVariables.date2);
+            //appointmentTableAdapter.FillByDate(dataSet1.appointment, currentOffset.ToString().Substring(0, 6), GVariables.date1, GVariables.date2);
+
+            // create and sort data for the datagrid ---------------------------------------------------------
+            Collections appointments = new Collections();
+            var apps = from a in dataSet1.appointment
+                       select a;
+
+            foreach (var a in apps)
+            {
+                newApp = new Appointments(a.appointmentId, a.customerId, a.userId, a.title, a.description, a.location, a.contact, a.type, a.url, a.start.ToLocalTime(), a.end.ToLocalTime(), a.createDate.ToLocalTime(), a.createdBy,
+                    a.lastUpdate.ToLocalTime(), a.lastUpdateBy);
+                appointments.addAppBC(newApp);
+            }
+
+            var monthApps = from a in appointments.appointmentsByConsultant
+                            where a.Start > GVariables.date1 && a.Start < GVariables.date2
+                            orderby a.Start
+                            select new { a.AppointmentId, a.CustomerId, a.UserId, a.Title, a.Description, a.Location, a.Contact, a.Type, a.Url, a.Start, a.End, a.CreateDate, a.CreatedBy, a.LastUpdate, a.LastUpdateBy };
+
+            appointmentDataGridView.DataSource = monthApps.ToList();
+            //-------------------------------------------------------------------------------------------------------------
+
             monthYearTxt.Text = "Days of " + GVariables.day + " - " + sevenDay + " " + GVariables.monthNm + " " + GVariables.year;
+        }
+
+        private void reportsBtn_Click(object sender, EventArgs e)
+        {
+            Reports reports = new Reports();
+            reports.ShowDialog();
         }
         //-----------------------------------------------------------------------------------------------------------------------------------------------
 
+        // Appointment reminder -------------------------------------------------------------------------------------------------------------------------
+        private void AppointmentReminder()
+        {
+            appointmentTableAdapter.Fill(dataSet1.appointment);
+            var appDetails = from c in dataSet1.customer
+                             join d in dataSet1.appointment
+                             on c.customerId equals d.customerId
+                             where d.start > DateTime.UtcNow
+                             orderby d.start
+                             select new { CustomerName = c.customerName, Consultant = d.contact, Time = d.start };
+            if (appDetails.Any())
+            {
+                string time = appDetails.FirstOrDefault().Time.ToLocalTime().ToString();
+                string cusName = appDetails.FirstOrDefault().CustomerName;
+                string consultant = appDetails.FirstOrDefault().Consultant;
+                MessageBox.Show(consultant + Properties.Resources.AppWith + cusName
+                            + Properties.Resources.at + time);
+            }
+            
+
+
+            
+        }
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+        // 15 minute reminder ---------------------------------------------------------------------------------------------------------------------------------
+        private void FifteenMinuteReminder()
+        {
+
+            var appDetails = from c in dataSet1.customer
+                             join d in dataSet1.appointment
+                             on c.customerId equals d.customerId
+                             where d.start > DateTime.UtcNow
+                             orderby d.start
+                             select new { CustomerName = c.customerName, Consultant = d.contact, Time = d.start.TimeOfDay };
+            if (appDetails.Any())
+            {
+                string timeStr = appDetails.FirstOrDefault().Time.ToString();
+                string cusName = appDetails.FirstOrDefault().CustomerName;
+                string consultant = appDetails.FirstOrDefault().Consultant;
+                DateTime time = DateTime.UtcNow;
+                DateTime xTime = time.AddMinutes(15);
+                DateTime vTime = time.AddMinutes(17);
+
+                if (appDetails.FirstOrDefault().Time >= xTime.TimeOfDay && appDetails.FirstOrDefault().Time <= vTime.TimeOfDay)
+                {
+                    MessageBox.Show(consultant + Properties.Resources.AppWith + cusName
+                                + Properties.Resources.at + timeStr);
+                }
+            }
+            
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            FifteenMinuteReminder();
+        }
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------
     }
 }

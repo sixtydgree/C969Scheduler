@@ -58,6 +58,10 @@ namespace C969Scheduler
             this.dataGridViewTextBoxColumn9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.createDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.createdBy = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lastUpdate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lastUpdateBy = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.appointmentBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dataSet1 = new C969Scheduler.Properties.DataSet1();
             this.appointmentIdTextBox = new System.Windows.Forms.TextBox();
@@ -68,7 +72,6 @@ namespace C969Scheduler
             this.locationTextBox = new System.Windows.Forms.TextBox();
             this.urlTextBox = new System.Windows.Forms.TextBox();
             this.startDateTimePicker = new System.Windows.Forms.DateTimePicker();
-            this.endDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.createDateDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.createdByTextBox = new System.Windows.Forms.TextBox();
             this.lastUpdateDateTimePicker = new System.Windows.Forms.DateTimePicker();
@@ -98,6 +101,7 @@ namespace C969Scheduler
             this.weekBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.endDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.typeComboBox = new System.Windows.Forms.ComboBox();
             this.contactComboBox = new System.Windows.Forms.ComboBox();
             this.monthYearTxt = new System.Windows.Forms.Label();
@@ -124,6 +128,9 @@ namespace C969Scheduler
             this.tableAdapterManager = new C969Scheduler.Properties.DataSet1TableAdapters.TableAdapterManager();
             this.customerInformationTableAdapter = new C969Scheduler.Properties.DataSet1TableAdapters.customerInformationTableAdapter();
             this.label3 = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.customerBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.customerTableAdapter = new C969Scheduler.Properties.DataSet1TableAdapters.customerTableAdapter();
             appointmentIdLabel = new System.Windows.Forms.Label();
             customerIdLabel = new System.Windows.Forms.Label();
             userIdLabel = new System.Windows.Forms.Label();
@@ -148,6 +155,7 @@ namespace C969Scheduler
             ((System.ComponentModel.ISupportInitialize)(this.customerInformationDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.customerInformationBindingSource)).BeginInit();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.customerBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // appointmentIdLabel
@@ -228,7 +236,6 @@ namespace C969Scheduler
             // appointmentDataGridView
             // 
             this.appointmentDataGridView.AllowUserToAddRows = false;
-            this.appointmentDataGridView.AllowUserToDeleteRows = false;
             this.appointmentDataGridView.AllowUserToResizeColumns = false;
             this.appointmentDataGridView.AllowUserToResizeRows = false;
             this.appointmentDataGridView.AutoGenerateColumns = false;
@@ -246,7 +253,11 @@ namespace C969Scheduler
             this.dataGridViewTextBoxColumn8,
             this.dataGridViewTextBoxColumn9,
             this.dataGridViewTextBoxColumn10,
-            this.dataGridViewTextBoxColumn11});
+            this.dataGridViewTextBoxColumn11,
+            this.createDate,
+            this.createdBy,
+            this.lastUpdate,
+            this.lastUpdateBy});
             this.appointmentDataGridView.DataSource = this.appointmentBindingSource;
             resources.ApplyResources(this.appointmentDataGridView, "appointmentDataGridView");
             this.appointmentDataGridView.Name = "appointmentDataGridView";
@@ -332,6 +343,34 @@ namespace C969Scheduler
             this.dataGridViewTextBoxColumn11.Name = "dataGridViewTextBoxColumn11";
             this.dataGridViewTextBoxColumn11.ReadOnly = true;
             // 
+            // createDate
+            // 
+            this.createDate.DataPropertyName = "createDate";
+            resources.ApplyResources(this.createDate, "createDate");
+            this.createDate.Name = "createDate";
+            this.createDate.ReadOnly = true;
+            // 
+            // createdBy
+            // 
+            this.createdBy.DataPropertyName = "createdBy";
+            resources.ApplyResources(this.createdBy, "createdBy");
+            this.createdBy.Name = "createdBy";
+            this.createdBy.ReadOnly = true;
+            // 
+            // lastUpdate
+            // 
+            this.lastUpdate.DataPropertyName = "lastUpdate";
+            resources.ApplyResources(this.lastUpdate, "lastUpdate");
+            this.lastUpdate.Name = "lastUpdate";
+            this.lastUpdate.ReadOnly = true;
+            // 
+            // lastUpdateBy
+            // 
+            this.lastUpdateBy.DataPropertyName = "lastUpdateBy";
+            resources.ApplyResources(this.lastUpdateBy, "lastUpdateBy");
+            this.lastUpdateBy.Name = "lastUpdateBy";
+            this.lastUpdateBy.ReadOnly = true;
+            // 
             // appointmentBindingSource
             // 
             this.appointmentBindingSource.DataMember = "appointment";
@@ -393,13 +432,6 @@ namespace C969Scheduler
             this.startDateTimePicker.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.appointmentBindingSource, "start", true));
             this.startDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.startDateTimePicker.Name = "startDateTimePicker";
-            // 
-            // endDateTimePicker
-            // 
-            resources.ApplyResources(this.endDateTimePicker, "endDateTimePicker");
-            this.endDateTimePicker.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.appointmentBindingSource, "end", true));
-            this.endDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.endDateTimePicker.Name = "endDateTimePicker";
             // 
             // createDateDateTimePicker
             // 
@@ -496,8 +528,8 @@ namespace C969Scheduler
             // 
             // saveBtn
             // 
-            this.saveBtn.Image = global::C969Scheduler.Properties.Resources._285657_floppy_guardar_save_icon;
             resources.ApplyResources(this.saveBtn, "saveBtn");
+            this.saveBtn.Image = global::C969Scheduler.Properties.Resources._285657_floppy_guardar_save_icon;
             this.saveBtn.Name = "saveBtn";
             this.saveBtn.Click += new System.EventHandler(this.saveBtn_Click);
             // 
@@ -508,8 +540,8 @@ namespace C969Scheduler
             // 
             // cancelBtn
             // 
-            this.cancelBtn.Image = global::C969Scheduler.Properties.Resources._12607_close_delete_error_exit_false_icon;
             resources.ApplyResources(this.cancelBtn, "cancelBtn");
+            this.cancelBtn.Image = global::C969Scheduler.Properties.Resources._12607_close_delete_error_exit_false_icon;
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
             // 
@@ -567,6 +599,7 @@ namespace C969Scheduler
             this.reportsBtn.Image = global::C969Scheduler.Properties.Resources._49615_reports_report_documents_icon;
             resources.ApplyResources(this.reportsBtn, "reportsBtn");
             this.reportsBtn.Name = "reportsBtn";
+            this.reportsBtn.Click += new System.EventHandler(this.reportsBtn_Click);
             // 
             // toolStripSeparator11
             // 
@@ -600,6 +633,7 @@ namespace C969Scheduler
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.endDateTimePicker);
             this.groupBox1.Controls.Add(this.typeComboBox);
             this.groupBox1.Controls.Add(this.contactComboBox);
             this.groupBox1.Controls.Add(this.createDateDateTimePicker);
@@ -610,7 +644,6 @@ namespace C969Scheduler
             this.groupBox1.Controls.Add(this.createdByTextBox);
             this.groupBox1.Controls.Add(createdByLabel);
             this.groupBox1.Controls.Add(createDateLabel);
-            this.groupBox1.Controls.Add(this.endDateTimePicker);
             this.groupBox1.Controls.Add(endLabel);
             this.groupBox1.Controls.Add(this.startDateTimePicker);
             this.groupBox1.Controls.Add(startLabel);
@@ -633,6 +666,13 @@ namespace C969Scheduler
             resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
+            // 
+            // endDateTimePicker
+            // 
+            resources.ApplyResources(this.endDateTimePicker, "endDateTimePicker");
+            this.endDateTimePicker.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.appointmentBindingSource, "end", true));
+            this.endDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.endDateTimePicker.Name = "endDateTimePicker";
             // 
             // typeComboBox
             // 
@@ -825,6 +865,20 @@ namespace C969Scheduler
             resources.ApplyResources(this.label3, "label3");
             this.label3.Name = "label3";
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 90000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // customerBindingSource
+            // 
+            this.customerBindingSource.DataMember = "customer";
+            this.customerBindingSource.DataSource = this.dataSet1;
+            // 
+            // customerTableAdapter
+            // 
+            this.customerTableAdapter.ClearBeforeFill = true;
+            // 
             // MonthUserControl
             // 
             resources.ApplyResources(this, "$this");
@@ -833,9 +887,9 @@ namespace C969Scheduler
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.monthYearTxt);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.appointmentDataGridView);
+            this.Controls.Add(this.groupBox1);
             this.Name = "MonthUserControl";
             this.Load += new System.EventHandler(this.MonthUserControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.appointmentDataGridView)).EndInit();
@@ -850,6 +904,7 @@ namespace C969Scheduler
             ((System.ComponentModel.ISupportInitialize)(this.customerInformationBindingSource)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.customerBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -862,17 +917,6 @@ namespace C969Scheduler
         private Properties.DataSet1TableAdapters.appointmentTableAdapter appointmentTableAdapter;
         private Properties.DataSet1TableAdapters.TableAdapterManager tableAdapterManager;
         private System.Windows.Forms.DataGridView appointmentDataGridView;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn10;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn11;
         private System.Windows.Forms.TextBox appointmentIdTextBox;
         private System.Windows.Forms.TextBox customerIdTextBox;
         private System.Windows.Forms.TextBox userIdTextBox;
@@ -881,7 +925,6 @@ namespace C969Scheduler
         private System.Windows.Forms.TextBox locationTextBox;
         private System.Windows.Forms.TextBox urlTextBox;
         private System.Windows.Forms.DateTimePicker startDateTimePicker;
-        private System.Windows.Forms.DateTimePicker endDateTimePicker;
         private System.Windows.Forms.DateTimePicker createDateDateTimePicker;
         private System.Windows.Forms.TextBox createdByTextBox;
         private System.Windows.Forms.DateTimePicker lastUpdateDateTimePicker;
@@ -935,5 +978,24 @@ namespace C969Scheduler
         private System.Windows.Forms.ToolStripButton weekBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.DateTimePicker endDateTimePicker;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn10;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn11;
+        private System.Windows.Forms.DataGridViewTextBoxColumn createDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn createdBy;
+        private System.Windows.Forms.DataGridViewTextBoxColumn lastUpdate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn lastUpdateBy;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.BindingSource customerBindingSource;
+        private Properties.DataSet1TableAdapters.customerTableAdapter customerTableAdapter;
     }
 }

@@ -14,6 +14,10 @@ namespace C969Scheduler
         [STAThread]
         static void Main()
         {
+            //System.Globalization.CultureInfo cultureInfo = new System.Globalization.CultureInfo("de-de");
+            //System.Globalization.CultureInfo cultureInfo = new System.Globalization.CultureInfo("fr");
+            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.CurrentUICulture;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Login());
